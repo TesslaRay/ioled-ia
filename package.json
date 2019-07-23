@@ -1,0 +1,30 @@
+{
+	"name": "ioled-dev",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"deploy": "npm run build --prefix client && gcloud app deploy",
+		"deploy-prod": "npm run build --prefix client && gcloud app deploy app-prod.yaml",
+		"start": "node index.js",
+		"server": "nodemon --no-deprecation index.js",
+		"client": "npm run start --prefix client",
+		"dev": "concurrently \"npm run server\" \"npm run client\""
+	},
+	"author": "Eduardo Hales",
+	"license": "ISC",
+	"dependencies": {
+		"@google-cloud/datastore": "^3.1.1",
+		"axios": "^0.19.0",
+		"concurrently": "^4.1.0",
+		"cookie-session": "^2.0.0-beta.3",
+		"express": "^4.16.4",
+		"express-rate-limit": "^3.4.0",
+		"googleapis": "^37.2.0",
+		"lodash": "^4.17.15",
+		"mongoose": "^5.4.10",
+		"passport": "^0.4.0",
+		"passport-google-oauth20": "^1.0.0",
+		"request": "^2.88.0"
+	}
+}

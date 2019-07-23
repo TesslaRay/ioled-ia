@@ -1,0 +1,9 @@
+# Dependency directories
+Images
+node_modules/
+tests/
+
+# Private 
+dev.js
+app.yaml
+app-prod.yaml
