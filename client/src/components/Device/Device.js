@@ -13,6 +13,9 @@ import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 
+import Button from '@material-ui/core/Button';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+
 // Component style.
 const styles = theme =>
 	createStyles({
@@ -64,6 +67,9 @@ const styles = theme =>
 		tempContainer: {
 			padding: theme.spacing.unit * 2,
 			display: 'flex',
+		},
+		button: {
+			textAlign: 'center',
 		},
 	});
 
@@ -170,7 +176,30 @@ class Device extends Component {
 							Temperatura: {temp.toFixed(2)} ºC
 						</Typography>
 					</div>
+
+					<div className={classes.switchContainer}>
+						<Typography className={classes.switchText} variant="subtitle1" gutterBottom>
+							{state ? 'Timer encendido' : 'Timer apagado'}
+						</Typography>
+						<Switch
+							checked={state}
+							onChange={this.switchOnChangeHandler}
+							value="state"
+							className={classes.switchStyle}
+							classes={{switchBase: classes.colorSwitchBase}}
+						/>
+					</div>
+
+					<div className={classes.button}> 
+						<Button variant="contained" color="default" >
+							Upload
+							<CloudUploadIcon />
+						</Button>
+					</div>
 				</Card>
+
+				
+
 				<Snackbar
 					anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
 					message={snackMessage}

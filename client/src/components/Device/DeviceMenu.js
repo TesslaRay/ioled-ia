@@ -25,7 +25,8 @@ const styles = theme => createStyles({
 });
 
 // Menu items.
-const options = ['editar', 'Eliminar'];
+// const options = ['editar','Eliminar'];
+const options = ['Eliminar'];
 
 class DeviceMenu extends Component {
 	// The DOM element used to set the position of the menu.

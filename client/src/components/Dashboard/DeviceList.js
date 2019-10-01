@@ -11,7 +11,7 @@ import Device from '../Device/Device';
 // Component style.
 const styles = theme => ({
 	grid: {
-		width: 1200,
+		width: 1500,
 		margin: `0 ${theme.spacing.unit * 2}px`,
 		[theme.breakpoints.down('sm')]: {
 			width: 'calc(100% - 20px)',
