@@ -1,0 +1,8 @@
+runtime: nodejs8
+
+env_variables:
+  NODE_ENV: 'production'
+  GOOGLE_CLIENT_ID: '1078573493253-sfi309avlkufe8oiqbgre2qdppna5183.apps.googleusercontent.com'
+  GOOGLE_CLIENT_SECRET: 'OgKFigx0LevXFSWial-l_EZ7'
+  MONGO_URI: 'mongodb+srv://tessla:macarena100@ioled-cluster-xkzhy.gcp.mongodb.net/test?retryWrites=true&w=majority'
+  COOKIE_KEY: 'ioled'

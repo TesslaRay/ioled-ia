@@ -23,6 +23,14 @@ const deviceSchema = new Schema({
 		type: Boolean,
 		default: true,
 	},
+	cron_on : {
+		type: Number,
+		default: 0,
+	},
+	cron_off: {
+		type: Number,
+		default: 0,
+	},
 });
 
 // Copy the deviceId to the alias field.

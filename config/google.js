@@ -12,7 +12,7 @@ const config = {
 	},
 	iotCore: {
 		cloudRegion: 'us-central1',
-		projectId: 'stark-ml-2',
+		projectId: 'ioled-dev-248517',
 		registryId: 'ioled-devices',
 		version: 0,
 		parentName: '',

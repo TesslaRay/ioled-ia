@@ -1,6 +1,6 @@
 {
 	"name": "ioled-dev",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -11,7 +11,7 @@
 		"client": "npm run start --prefix client",
 		"dev": "concurrently \"npm run server\" \"npm run client\""
 	},
-	"author": "Eduardo Hales",
+	"author": "Eduardo Hales/Cristian Valdivia",
 	"license": "ISC",
 	"dependencies": {
 		"@google-cloud/datastore": "^3.1.1",
@@ -21,7 +21,7 @@
 		"express": "^4.16.4",
 		"express-rate-limit": "^3.4.0",
 		"googleapis": "^37.2.0",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.11",
 		"mongoose": "^5.4.10",
 		"passport": "^0.4.0",
 		"passport-google-oauth20": "^1.0.0",
