@@ -12,7 +12,10 @@ const app = express();
 expressConfig(app);
 
 // Connect to the database.
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI, {
+    useCreateIndex: true,
+    useNewUrlParser: true
+}); 
 
 // Start the app in the given port.
 app.listen(serverConfig.PORT);
