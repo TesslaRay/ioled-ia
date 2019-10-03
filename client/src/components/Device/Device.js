@@ -80,7 +80,7 @@ class Device extends Component {
 		snackOpen: false,
 		snackMessage: '',	
 		timerState: true,
-		tempTimerOn: this.props.timerOn,	
+		tempTimer:[this.props.timerOn, this.props.timerOff],	
 	};
 
 	componentDidMount() {
@@ -141,29 +141,27 @@ class Device extends Component {
 	 * Triggers on release inside the slider element and clicking the slider.
 	 */
 	sliderOnChangeHandlerTimer = (event, value) => {
-		if (event.type === 'click') {
-			this.setState({tempTimeOn: parseFloat(value.toFixed(2))}, this.sliderOnReleaseHandler);
-		}
-		this.setState({tempTimerOn: parseFloat(value.toFixed(2))});
+		this.setState({tempTimer: value});
+		console.log({tempTimer: value});	
 	};
 
-	sliderOnReleaseHandlerTimer = async () => {
-		if (this.state.tempTimerOn !== this.props.timerOn) {
-			this.setState({snackOpen: false});
-			const {duty, state, timerOff, timerState, deviceId, index} = this.props;
-			const deviceConfig = this.stateToConfig(duty, state, this.state.tempTimerOn, timerOff, timerState, deviceId);
-			await this.props.updateDeviceConfig(deviceConfig, index);
-			if (this.state.tempTimerOn !== this.props.timerOn) {
-				this.setState({tempTimerOn: this.props.timerOn});
-			}
-			this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-		}
-	};
+	// sliderOnReleaseHandlerTimer = async () => {
+	// 	if (this.state.tempTimerOn !== this.props.timerOn) {
+	// 		this.setState({snackOpen: false});
+	// 		const {duty, state, timerOff, timerState, deviceId, index} = this.props;
+	// 		const deviceConfig = this.stateToConfig(duty, state, this.state.tempTimerOn, timerOff, timerState, deviceId);
+	// 		await this.props.updateDeviceConfig(deviceConfig, index);
+	// 		if (this.state.tempTimerOn !== this.props.timerOn) {
+	// 			this.setState({tempTimerOn: this.props.timerOn});
+	// 		}
+	// 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+	// 	}
+	// };
 
 	// Render the component.
 	render() {
 		const {classes, state, deviceId, timerState, alias} = this.props;
-		const {snackOpen, snackMessage, tempDuty, tempTimerOn} = this.state;
+		const {snackOpen, snackMessage, tempDuty, tempTimer} = this.state;
 		const {temp = 0, hum = 0} = this.props;
 
 		return (
@@ -232,12 +230,11 @@ class Device extends Component {
 							Timer range
 						</Typography>
 						<Slider			
-							value={tempTimerOn}
+							value={tempTimer}
 							valueLabelDisplay="auto"
 							min={0}
 							max={24}
 							onChange={this.sliderOnChangeHandlerTimer}
-							onChangeCommitted={this.sliderOnReleaseHandlerTimer}
 						/>
 						</div>
 
