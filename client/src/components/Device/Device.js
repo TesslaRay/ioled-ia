@@ -141,22 +141,20 @@ class Device extends Component {
 	 * Triggers on release inside the slider element and clicking the slider.
 	 */
 	sliderOnChangeHandlerTimer = (event, value) => {
+		if (event.type === 'click') {
+			this.setState({tempTimer: value}, this.sliderOnReleaseHandler);
+		}
 		this.setState({tempTimer: value});
-		console.log({tempTimer: value});	
 	};
 
-	// sliderOnReleaseHandlerTimer = async () => {
-	// 	if (this.state.tempTimerOn !== this.props.timerOn) {
-	// 		this.setState({snackOpen: false});
-	// 		const {duty, state, timerOff, timerState, deviceId, index} = this.props;
-	// 		const deviceConfig = this.stateToConfig(duty, state, this.state.tempTimerOn, timerOff, timerState, deviceId);
-	// 		await this.props.updateDeviceConfig(deviceConfig, index);
-	// 		if (this.state.tempTimerOn !== this.props.timerOn) {
-	// 			this.setState({tempTimerOn: this.props.timerOn});
-	// 		}
-	// 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-	// 	}
-	// };
+	sliderOnReleaseHandlerTimer = async () => {
+		if (this.state.tempTimer !== this.props.timer) {
+			const {duty, state,timerState, deviceId, index} = this.props;
+			const deviceConfig = this.stateToConfig(duty, state, this.state.tempTimer[1], this.state.tempTimer[0], timerState, deviceId);
+			await this.props.updateDeviceConfig(deviceConfig, index);
+			this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+		}
+	};
 
 	// Render the component.
 	render() {
@@ -225,9 +223,12 @@ class Device extends Component {
 					</div>
 
 					{/* Timer slider */}
-					<div className={classes.dutyContainer}>
-						<Typography id="range-slider" gutterBottom>
-							Timer range
+					<div className={classes.dutyContainer}>						
+						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
+							Hora On: {(tempTimer[1]).toFixed()} 
+						</Typography>
+						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
+							Hora Off: {(tempTimer[0]).toFixed()}
 						</Typography>
 						<Slider			
 							value={tempTimer}
@@ -235,6 +236,7 @@ class Device extends Component {
 							min={0}
 							max={24}
 							onChange={this.sliderOnChangeHandlerTimer}
+							onChangeCommitted={this.sliderOnReleaseHandlerTimer}							
 						/>
 						</div>
 
