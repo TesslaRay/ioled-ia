@@ -23,13 +23,17 @@ const deviceSchema = new Schema({
 		type: Boolean,
 		default: true,
 	},
-	cron_on : {
+	timerOn : {
 		type: Number,
 		default: 0,
 	},
-	cron_off: {
+	timerOff: {
 		type: Number,
 		default: 0,
+	},
+	timerState: {
+		type: Boolean,
+		default: false,
 	},
 });
 

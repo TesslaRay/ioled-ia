@@ -8,10 +8,13 @@ import DeviceMenu from './DeviceMenu';
 import {withStyles, createStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
-import Slider from '@material-ui/lab/Slider';
+import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
+
+import Button from '@material-ui/core/Button';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 // Component style.
 const styles = theme =>
@@ -27,12 +30,12 @@ const styles = theme =>
 			margin: 'auto 0',
 		},
 		card: {
-			padding: theme.spacing.unit * 3,
+			padding: theme.spacing(3),
 			textAlign: 'left',
 			color: theme.palette.text.secondary,
 		},
 		dutyContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			textAlign: 'left',
 		},
 		dutyText: {
@@ -42,10 +45,10 @@ const styles = theme =>
 		rangeLabel: {
 			display: 'flex',
 			justifyContent: 'space-between',
-			paddingTop: theme.spacing.unit * 2,
+			paddingTop: theme.spacing(2),
 		},
 		switchContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			display: 'flex',
 			justifyContent: 'space-between',
 		},
@@ -58,12 +61,15 @@ const styles = theme =>
 			color: 'green',
 		},
 		humContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			display: 'flex',
 		},
 		tempContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			display: 'flex',
+		},
+		button: {
+			textAlign: 'center',
 		},
 	});
 
@@ -72,7 +78,9 @@ class Device extends Component {
 	state = {
 		tempDuty: this.props.duty,
 		snackOpen: false,
-		snackMessage: '',
+		snackMessage: '',	
+		timerState: true,
+		tempTimerOn: this.props.timerOn,	
 	};
 
 	componentDidMount() {
@@ -81,18 +89,18 @@ class Device extends Component {
 	}
 
 	// Map device state to configuration readable by the backend.
-	stateToConfig = (duty, state, deviceId) => {
-		return {config: {duty, state}, deviceId};
+	stateToConfig = (duty, state, timerOn, timerOff, timerState, deviceId) => {
+		return {config: {duty, state, timerOn, timerOff, timerState}, deviceId};
 	};
 
 	/* Modify the state of the led to on of off.
 	 * The switch behaviour can be changed by adding the await
 	 * keyword in the request made in the action creator.
 	 */
-	switchOnChangeHandler = async event => {
+	switchOn = async event => {
 		this.setState({snackOpen: false});
-		const {duty, deviceId, index} = this.props;
-		const deviceConfig = this.stateToConfig(duty, event.target.checked, deviceId);
+		const {duty,  timerOn, timerOff, timerState, deviceId, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, event.target.checked, timerOn, timerOff, timerState, deviceId);
 		await this.props.updateDeviceConfig(deviceConfig, index);
 		this.setState({snackOpen: true, snackMessage: 'Dispositivo actualizado'});
 	};
@@ -110,8 +118,8 @@ class Device extends Component {
 	sliderOnReleaseHandler = async () => {
 		if (this.state.tempDuty !== this.props.duty) {
 			this.setState({snackOpen: false});
-			const {state, deviceId, index} = this.props;
-			const deviceConfig = this.stateToConfig(this.state.tempDuty, state, deviceId);
+			const {state, timerOn, timerOff, timerState, deviceId, index} = this.props;
+			const deviceConfig = this.stateToConfig(this.state.tempDuty, state, timerOn, timerOff, timerState, deviceId);
 			await this.props.updateDeviceConfig(deviceConfig, index);
 			if (this.state.tempDuty !== this.props.duty) {
 				this.setState({tempDuty: this.props.duty});
@@ -120,14 +128,46 @@ class Device extends Component {
 		}
 	};
 
+	// Modify the state of timer state to on to off.
+	switchOnTimer = async event => {
+		this.setState({snackOpen: false});
+		const {duty, state, timerOn, timerOff, deviceId, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, event.target.checked, deviceId);
+		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+	};
+
+	/* Change the timer of Timer.
+	 * Triggers on release inside the slider element and clicking the slider.
+	 */
+	sliderOnChangeHandlerTimer = (event, value) => {
+		if (event.type === 'click') {
+			this.setState({tempTimeOn: parseFloat(value.toFixed(2))}, this.sliderOnReleaseHandler);
+		}
+		this.setState({tempTimerOn: parseFloat(value.toFixed(2))});
+	};
+
+	sliderOnReleaseHandlerTimer = async () => {
+		if (this.state.tempTimerOn !== this.props.timerOn) {
+			this.setState({snackOpen: false});
+			const {duty, state, timerOff, timerState, deviceId, index} = this.props;
+			const deviceConfig = this.stateToConfig(duty, state, this.state.tempTimerOn, timerOff, timerState, deviceId);
+			await this.props.updateDeviceConfig(deviceConfig, index);
+			if (this.state.tempTimerOn !== this.props.timerOn) {
+				this.setState({tempTimerOn: this.props.timerOn});
+			}
+			this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+		}
+	};
+
 	// Render the component.
 	render() {
-		const {classes, state, deviceId, alias} = this.props;
-		const {snackOpen, snackMessage, tempDuty} = this.state;
+		const {classes, state, deviceId, timerState, alias} = this.props;
+		const {snackOpen, snackMessage, tempDuty, tempTimerOn} = this.state;
 		const {temp = 0, hum = 0} = this.props;
 
 		return (
-			<Grid item xs={12} md={4}>
+			<Grid item xs={12} md={6}>
 				<Card className={classes.card}>
 					<div className={classes.cardHeader}>
 						<div className={classes.nameContainer}>
@@ -141,6 +181,7 @@ class Device extends Component {
 						<DeviceMenu deviceId={deviceId} />
 					</div>
 
+					{/* Slider */}
 					<div className={classes.dutyContainer}>
 						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
 							Intensidad: {(tempDuty * 100).toFixed()}%
@@ -151,7 +192,7 @@ class Device extends Component {
 							max={1}
 							step={0.05}
 							onChange={this.sliderOnChangeHandler}
-							onDragEnd={this.sliderOnReleaseHandler}
+							onChangeCommitted={this.sliderOnReleaseHandler}		// Previous version onDragEnd
 						/>
 						<div className={classes.rangeLabel}>
 							<Typography variant="subtitle2">0%</Typography>
@@ -170,7 +211,46 @@ class Device extends Component {
 							Temperatura: {temp.toFixed(2)} ºC
 						</Typography>
 					</div>
+
+					{/*	switch button TIMER*/}
+					<div className={classes.switchContainer}>
+						<Typography className={classes.switchText} variant="subtitle1" gutterBottom>
+							{timerState ? 'Timer encendido' : 'Timer apagado'}
+						</Typography>
+						<Switch
+							checked={timerState}
+							onChange={this.switchOnTimer}
+							value="timerState"
+							className={classes.switchStyle}
+							classes={{switchBase: classes.colorSwitchBase}}
+						/>
+					</div>
+
+					{/* Timer slider */}
+					<div className={classes.dutyContainer}>
+						<Typography id="range-slider" gutterBottom>
+							Timer range
+						</Typography>
+						<Slider			
+							value={tempTimerOn}
+							valueLabelDisplay="auto"
+							min={0}
+							max={24}
+							onChange={this.sliderOnChangeHandlerTimer}
+							onChangeCommitted={this.sliderOnReleaseHandlerTimer}
+						/>
+						</div>
+
+					{/* Button upload image */}
+					<div className={classes.button}> 
+						<Button variant="contained" color="default" >
+							Upload
+							<CloudUploadIcon />
+						</Button>
+					</div>
+					
 				</Card>
+
 				<Snackbar
 					anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
 					message={snackMessage}

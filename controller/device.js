@@ -9,7 +9,7 @@ const {sendGoogleDeviceConfig, getGoogleDeviceState} = require('./google');
  * @param {object} res Response.
  */
 exports.listDevices = async (req, res) => {
-	const devices = await Device.find({_user: req.user.id}, 'deviceId duty state alias -_id');
+	const devices = await Device.find({_user: req.user.id}, 'deviceId duty state alias timerOn timerOff timerState');
 	res.send({devices});
 };
 
@@ -21,6 +21,7 @@ exports.listDevices = async (req, res) => {
  */
 exports.newDevice = async (req, res) => {
 	console.log(req.body);
+	console.log(req.user)
 	const {deviceId} = req.body;
 	const currentUser = await User.findById(req.user.id);
 
@@ -45,8 +46,8 @@ exports.newDevice = async (req, res) => {
 /**
  * Update the configuration of a registered device for the current user.
  * @description Send the configuration to Google IoT Core.
- * @param {{params: {id: string},
- * body: {device: {deviceId: string, config: {duty: number, state: boolean}}},
+ * @param {{params: {id: string}, 
+ * body: {device: {deviceId: string, config: {duty: number, state: boolean, timerOn: number, timeOff: number, timerState: boolean, }}},
  * user: {id: string}}} req Request.
  * @param res Response.
  */
@@ -66,7 +67,13 @@ exports.updateDeviceConfig = async (req, res) => {
 	// If configuration is ok, then update the config in the database.
 	if (status === 200) {
 		try {
-			await Device.findOneAndUpdate({_user: req.user.id, deviceId: deviceId}, {duty: config.duty, state: config.state});
+			await Device.findOneAndUpdate({_user: req.user.id, deviceId: deviceId}, {
+					duty: config.duty, 
+					state: config.state,
+					timerOn: config.timerOn,
+					timerOff: config.timerOff,
+					timerState: config.timerState
+				});
 			return res.status(status).send({status});
 		} catch (err) {
 			console.log('MongoError', err);

@@ -5,7 +5,7 @@ import {withStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 // React components.
-import DeviceFrom from './addButton';
+import DeviceForm from './addButton';
 import DeviceList from './DeviceList';
 
 // Dashboard component styles.
@@ -40,11 +40,11 @@ class DashBoard extends Component {
 				<Grid item xs={12}>
 					<div className={classes.topBar}>
 						<div>
-							<Typography variant="h6">Dashboard</Typography>
+							<Typography variant="h5">Dashboard</Typography>
 							<Typography variant="body2">Controla tus dispositivos!</Typography>
 						</div>
 						<div>
-							<DeviceFrom />
+							<DeviceForm />
 						</div>
 					</div>
 				</Grid>
