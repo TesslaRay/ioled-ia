@@ -12,7 +12,7 @@ import Device from '../Device/Device';
 const styles = theme => ({
 	grid: {
 		width: 1500,
-		margin: `0 ${theme.spacing.unit * 2}px`,
+		margin: `0 ${theme.spacing(2)}px`,
 		[theme.breakpoints.down('sm')]: {
 			width: 'calc(100% - 20px)',
 		},
@@ -38,7 +38,7 @@ class DeviceList extends Component {
 		const {classes} = this.props;
 		return (
 			<Grid container justify="center">
-				<Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
+				<Grid spacing={10} alignItems="center" justify="center" container className={classes.grid}>
 					{this.renderComponentList()}
 				</Grid>
 			</Grid>

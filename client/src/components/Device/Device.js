@@ -8,7 +8,7 @@ import DeviceMenu from './DeviceMenu';
 import {withStyles, createStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
-import Slider from '@material-ui/lab/Slider';
+import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -30,12 +30,12 @@ const styles = theme =>
 			margin: 'auto 0',
 		},
 		card: {
-			padding: theme.spacing.unit * 3,
+			padding: theme.spacing(3),
 			textAlign: 'left',
 			color: theme.palette.text.secondary,
 		},
 		dutyContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			textAlign: 'left',
 		},
 		dutyText: {
@@ -45,10 +45,10 @@ const styles = theme =>
 		rangeLabel: {
 			display: 'flex',
 			justifyContent: 'space-between',
-			paddingTop: theme.spacing.unit * 2,
+			paddingTop: theme.spacing(2),
 		},
 		switchContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			display: 'flex',
 			justifyContent: 'space-between',
 		},
@@ -61,11 +61,11 @@ const styles = theme =>
 			color: 'green',
 		},
 		humContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			display: 'flex',
 		},
 		tempContainer: {
-			padding: theme.spacing.unit * 2,
+			padding: theme.spacing(2),
 			display: 'flex',
 		},
 		button: {
@@ -133,7 +133,7 @@ class Device extends Component {
 		const {temp = 0, hum = 0} = this.props;
 
 		return (
-			<Grid item xs={12} md={4}>
+			<Grid item xs={12} md={6}>
 				<Card className={classes.card}>
 					<div className={classes.cardHeader}>
 						<div className={classes.nameContainer}>
@@ -147,6 +147,7 @@ class Device extends Component {
 						<DeviceMenu deviceId={deviceId} />
 					</div>
 
+					{/* Slider */}
 					<div className={classes.dutyContainer}>
 						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
 							Intensidad: {(tempDuty * 100).toFixed()}%
@@ -157,7 +158,7 @@ class Device extends Component {
 							max={1}
 							step={0.05}
 							onChange={this.sliderOnChangeHandler}
-							onDragEnd={this.sliderOnReleaseHandler}
+							onChangeCommitted={this.sliderOnReleaseHandler}		// Previous version onDragEnd
 						/>
 						<div className={classes.rangeLabel}>
 							<Typography variant="subtitle2">0%</Typography>
@@ -177,6 +178,7 @@ class Device extends Component {
 						</Typography>
 					</div>
 
+					{/*	switch button */}
 					<div className={classes.switchContainer}>
 						<Typography className={classes.switchText} variant="subtitle1" gutterBottom>
 							{state ? 'Timer encendido' : 'Timer apagado'}
@@ -190,12 +192,27 @@ class Device extends Component {
 						/>
 					</div>
 
+					{/* Timer slider */}
+					<div className={classes.dutyContainer}>
+						<Typography id="range-slider" gutterBottom>
+							Timer range
+						</Typography>
+						<Slider							
+							valueLabelDisplay="auto"
+							aria-labelledby="range-slider"
+							min={0}
+							max={24}
+						/>
+						</div>
+
+					{/* Button upload image */}
 					<div className={classes.button}> 
 						<Button variant="contained" color="default" >
 							Upload
 							<CloudUploadIcon />
 						</Button>
 					</div>
+					
 				</Card>
 
 				

@@ -22,22 +22,15 @@ exports.fetchIotCoreDevices = async (req, res) => {
 exports.sendGoogleDeviceConfig = async (deviceId, config) => {
 	// Filter the input from the client.
 	const _config = _.pick(config, ['duty', 'state']);
-	const _config_timer = _.pick(config, ['hour']);
-
+	const _configTimer = _.pick(config, ['timerOn', 'timerOff', 'timerState']);
+	
 	// Generate the board format for the device.
 	const board = {
 		board: {
 			led1: _config,
 			led2: _config,
-			led3: _config,
-			led4: _config,
-			led5: _config,
-			timer: {
-				cron_on: 5,
-				cron_off: 10,
-			},
+			timer: _configTimer,
 		},
-
 	};
 	// Convert config object to JSON.
 	const data = JSON.stringify(board);
