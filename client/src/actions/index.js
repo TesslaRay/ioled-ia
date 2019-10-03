@@ -64,7 +64,7 @@ export const registerDevice = deviceId => async dispatch => {
 
 /**
  * Update a device configuration.
- * @param {{config: {duty: number, state: boolean}, deviceId: string}} device Device config blob.
+ * @param {{config: {duty: number, state: boolean, timerOn: number, timeOff: number, timerState: boolean, }}} device Device config blob.
  * @param {number} index The index of the device in the list.
  */
 export const updateDeviceConfig = (device, index) => async dispatch => {

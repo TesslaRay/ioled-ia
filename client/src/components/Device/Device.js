@@ -78,7 +78,9 @@ class Device extends Component {
 	state = {
 		tempDuty: this.props.duty,
 		snackOpen: false,
-		snackMessage: '',
+		snackMessage: '',	
+		timerState: true,
+			
 	};
 
 	componentDidMount() {
@@ -87,18 +89,18 @@ class Device extends Component {
 	}
 
 	// Map device state to configuration readable by the backend.
-	stateToConfig = (duty, state, deviceId) => {
-		return {config: {duty, state}, deviceId};
+	stateToConfig = (duty, state, timerOn, timerOff, timerState, deviceId) => {
+		return {config: {duty, state, timerOn, timerOff, timerState}, deviceId};
 	};
 
 	/* Modify the state of the led to on of off.
 	 * The switch behaviour can be changed by adding the await
 	 * keyword in the request made in the action creator.
 	 */
-	switchOnChangeHandler = async event => {
+	switchOn = async event => {
 		this.setState({snackOpen: false});
-		const {duty, deviceId, index} = this.props;
-		const deviceConfig = this.stateToConfig(duty, event.target.checked, deviceId);
+		const {duty,  timerOn, timerOff, timerState, deviceId, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, event.target.checked, timerOn, timerOff, timerState, deviceId);
 		await this.props.updateDeviceConfig(deviceConfig, index);
 		this.setState({snackOpen: true, snackMessage: 'Dispositivo actualizado'});
 	};
@@ -116,8 +118,8 @@ class Device extends Component {
 	sliderOnReleaseHandler = async () => {
 		if (this.state.tempDuty !== this.props.duty) {
 			this.setState({snackOpen: false});
-			const {state, deviceId, index} = this.props;
-			const deviceConfig = this.stateToConfig(this.state.tempDuty, state, deviceId);
+			const {state, timerOn, timerOff, timerState, deviceId, index} = this.props;
+			const deviceConfig = this.stateToConfig(this.state.tempDuty, state, timerOn, timerOff, timerState, deviceId);
 			await this.props.updateDeviceConfig(deviceConfig, index);
 			if (this.state.tempDuty !== this.props.duty) {
 				this.setState({tempDuty: this.props.duty});
@@ -126,9 +128,18 @@ class Device extends Component {
 		}
 	};
 
+	// Modify the state of timer state to on to off.
+	switchOnTimer = async event => {
+		this.setState({snackOpen: false});
+		const {duty, state, timerOn, timerOff, deviceId, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, event.target.checked, deviceId);
+		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+	};
+
 	// Render the component.
 	render() {
-		const {classes, state, deviceId, alias} = this.props;
+		const {classes, state, deviceId, timerState, alias} = this.props;
 		const {snackOpen, snackMessage, tempDuty} = this.state;
 		const {temp = 0, hum = 0} = this.props;
 
@@ -178,15 +189,15 @@ class Device extends Component {
 						</Typography>
 					</div>
 
-					{/*	switch button */}
+					{/*	switch button TIMER*/}
 					<div className={classes.switchContainer}>
 						<Typography className={classes.switchText} variant="subtitle1" gutterBottom>
-							{state ? 'Timer encendido' : 'Timer apagado'}
+							{timerState ? 'Timer encendido' : 'Timer apagado'}
 						</Typography>
 						<Switch
-							checked={state}
-							onChange={this.switchOnChangeHandler}
-							value="state"
+							checked={timerState}
+							onChange={this.switchOnTimer}
+							value="timerState"
 							className={classes.switchStyle}
 							classes={{switchBase: classes.colorSwitchBase}}
 						/>
@@ -197,9 +208,8 @@ class Device extends Component {
 						<Typography id="range-slider" gutterBottom>
 							Timer range
 						</Typography>
-						<Slider							
+						<Slider				
 							valueLabelDisplay="auto"
-							aria-labelledby="range-slider"
 							min={0}
 							max={24}
 						/>
@@ -214,8 +224,6 @@ class Device extends Component {
 					</div>
 					
 				</Card>
-
-				
 
 				<Snackbar
 					anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
