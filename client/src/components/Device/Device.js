@@ -158,7 +158,7 @@ class Device extends Component {
 
 	// Render the component.
 	render() {
-		const {classes, state, deviceId, timerState, alias} = this.props;
+		const {classes, deviceId, timerState, alias} = this.props;
 		const {snackOpen, snackMessage, tempDuty, tempTimer} = this.state;
 		const {temp = 0, hum = 0} = this.props;
 
