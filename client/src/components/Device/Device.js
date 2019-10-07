@@ -15,6 +15,13 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import DateFnsUtils from "@date-io/date-fns"; // choose your lib
+import {
+  DatePicker,
+  TimePicker,
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
 // Component style.
 const styles = theme =>
@@ -137,7 +144,7 @@ class Device extends Component {
 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
 	};
 
-	/* Change the timer of Timer.
+	/* Change the time of Timer.
 	 * Triggers on release inside the slider element and clicking the slider.
 	 */
 	sliderOnChangeHandlerTimer = (event, value) => {
@@ -155,6 +162,7 @@ class Device extends Component {
 			this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
 		}
 	};
+
 
 	// Render the component.
 	render() {
@@ -238,7 +246,11 @@ class Device extends Component {
 							onChange={this.sliderOnChangeHandlerTimer}
 							onChangeCommitted={this.sliderOnReleaseHandlerTimer}							
 						/>
-						</div>
+					</div>
+
+					{/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
+						<TimePicker value={} onChange={} />
+					</MuiPickersUtilsProvider> */}
 
 					{/* Button upload image */}
 					<div className={classes.button}> 
