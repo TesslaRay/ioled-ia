@@ -12,16 +12,9 @@ import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
-
-import Button from '@material-ui/core/Button';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import DateFnsUtils from "@date-io/date-fns"; // choose your lib
-import {
-  DatePicker,
-  TimePicker,
-  DateTimePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import TextField from '@material-ui/core/TextField';
+import Fade from '@material-ui/core/Fade';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 // Component style.
 const styles = theme =>
@@ -78,8 +71,12 @@ const styles = theme =>
 		button: {
 			textAlign: 'center',
 		},
+		timer: {
+			float: 'left',
+			marginLeft: '40px',
+		}
 	});
-
+		  		
 class Device extends Component {
 	// Component state.
 	state = {
@@ -87,7 +84,9 @@ class Device extends Component {
 		snackOpen: false,
 		snackMessage: '',	
 		timerState: true,
-		tempTimer:[this.props.timerOn, this.props.timerOff],	
+		trans: false,
+		tempOn: this.props.timerOn,
+		tempOff: this.props.timerOff,
 	};
 
 	componentDidMount() {
@@ -124,6 +123,7 @@ class Device extends Component {
 
 	sliderOnReleaseHandler = async () => {
 		if (this.state.tempDuty !== this.props.duty) {
+			this.setState({trans:true});
 			this.setState({snackOpen: false});
 			const {state, timerOn, timerOff, timerState, deviceId, index} = this.props;
 			const deviceConfig = this.stateToConfig(this.state.tempDuty, state, timerOn, timerOff, timerState, deviceId);
@@ -131,6 +131,7 @@ class Device extends Component {
 			if (this.state.tempDuty !== this.props.duty) {
 				this.setState({tempDuty: this.props.duty});
 			}
+			this.setState({trans:false});
 			this.setState({snackOpen: true, snackMessage: 'Dispositivo actualizado'});
 		}
 	};
@@ -138,40 +139,50 @@ class Device extends Component {
 	// Modify the state of timer state to on to off.
 	switchOnTimer = async event => {
 		this.setState({snackOpen: false});
+		this.setState({trans:true});
 		const {duty, state, timerOn, timerOff, deviceId, index} = this.props;
 		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, event.target.checked, deviceId);
 		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({trans:false});
 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
 	};
 
-	/* Change the time of Timer.
-	 * Triggers on release inside the slider element and clicking the slider.
-	 */
-	sliderOnChangeHandlerTimer = (event, value) => {
-		if (event.type === 'click') {
-			this.setState({tempTimer: value}, this.sliderOnReleaseHandler);
-		}
-		this.setState({tempTimer: value});
-	};
+	timerOnChange = async event => {
+		this.setState({tempOn: event.target.value});					
+	}
 
-	sliderOnReleaseHandlerTimer = async () => {
-		if (this.state.tempTimer !== this.props.timer) {
-			const {duty, state,timerState, deviceId, index} = this.props;
-			const deviceConfig = this.stateToConfig(duty, state, this.state.tempTimer[1], this.state.tempTimer[0], timerState, deviceId);
-			await this.props.updateDeviceConfig(deviceConfig, index);
-			this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-		}
-	};
+	timerOnRelease = async event => {
+		this.setState({snackOpen: false});
+		this.setState({trans:true});
+		const {duty, state, timerOff, timerState, deviceId, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, this.state.tempOn, timerOff, timerState, deviceId);
+		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({trans:false});
+		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+	}
 
+	timerOffChange = async event => {
+		this.setState({tempOff: event.target.value});					
+	}
 
+	timerOffRelease = async event => {
+		this.setState({snackOpen: false});
+		this.setState({trans:true});
+		const {duty, state, timerOn, timerState, deviceId, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, timerOn, this.state.tempOff, timerState, deviceId);
+		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({trans:false});
+		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+	}
+			
 	// Render the component.
 	render() {
 		const {classes, deviceId, timerState, alias} = this.props;
-		const {snackOpen, snackMessage, tempDuty, tempTimer} = this.state;
+		const {snackOpen, snackMessage, tempDuty, tempOn, tempOff, trans} = this.state;
 		const {temp = 0, hum = 0} = this.props;
 
 		return (
-			<Grid item xs={12} md={6}>
+			<Grid item xs={12} md={8}>
 				<Card className={classes.card}>
 					<div className={classes.cardHeader}>
 						<div className={classes.nameContainer}>
@@ -230,37 +241,37 @@ class Device extends Component {
 						/>
 					</div>
 
-					{/* Timer slider */}
-					<div className={classes.dutyContainer}>						
-						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
-							Hora On: {(tempTimer[1]).toFixed()} 
-						</Typography>
-						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
-							Hora Off: {(tempTimer[0]).toFixed()}
-						</Typography>
-						<Slider			
-							value={tempTimer}
-							valueLabelDisplay="auto"
-							min={0}
-							max={24}
-							onChange={this.sliderOnChangeHandlerTimer}
-							onChangeCommitted={this.sliderOnReleaseHandlerTimer}							
-						/>
+					<div className={classes.timer}> 
+						<form noValidate>
+							<TextField
+								id="time"
+								label="Encendido"
+								type="time"
+								value={tempOn}										
+								onChange={this.timerOnChange}	
+								onBlur={this.timerOnRelease}															
+							/>
+						</form>					
 					</div>
 
-					{/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<TimePicker value={} onChange={} />
-					</MuiPickersUtilsProvider> */}
-
-					{/* Button upload image */}
-					<div className={classes.button}> 
-						<Button variant="contained" color="default" >
-							Upload
-							<CloudUploadIcon />
-						</Button>
+					<div className={classes.timer}>
+						<form  noValidate>
+							<TextField
+								id="time"
+								label="Apagado"
+								type="time"
+								value={tempOff}
+								onChange={this.timerOffChange}	
+								onBlur={this.timerOffRelease}										
+							/>
+						</form>
 					</div>
-					
+
 				</Card>
+
+				<Fade in={trans}>		
+					<LinearProgress />
+				</Fade>			
 
 				<Snackbar
 					anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
