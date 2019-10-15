@@ -47,7 +47,7 @@ exports.newDevice = async (req, res) => {
  * Update the configuration of a registered device for the current user.
  * @description Send the configuration to Google IoT Core.
  * @param {{params: {id: string}, 
- * body: {device: {deviceId: string, config: {duty: number, state: boolean, timerOn: number, timeOff: number, timerState: boolean, }}},
+ * body: {device: {deviceId: string, config: {duty: number, state: boolean, timerOn: string, timeOff: string, timerState: boolean, }}},
  * user: {id: string}}} req Request.
  * @param res Response.
  */
@@ -116,4 +116,31 @@ exports.getDeviceState = async (req, res) => {
 	const deviceId = req.params.id;
 	const state = await getGoogleDeviceState(deviceId);
 	res.send({state});
+};
+
+/**
+ * changeAlias
+ * @param {{params: {id: string}, user: {id: string}}} req Request.
+ * @param {object} res Respose.
+ */
+exports.changeAlias = async (req, res) => {
+	const deviceId = req.params.id;
+
+	try {
+		({config} = req.body.device);
+	} catch (err) {
+		return res.status(400).send({status: 400});
+	}
+	console.log('Change alias ...');
+
+	try {
+		await Device.findOneAndUpdate({_user: req.user.id, deviceId: deviceId}, {
+				alias: config.alias, 
+		});
+		return res.status(204).send({status: 204});
+	} catch (err) {
+		console.log('MongoError', err);
+	}
+	// res.status(201).send({message: 'Dispositivo registrado'});
+
 };

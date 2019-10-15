@@ -24,12 +24,12 @@ const deviceSchema = new Schema({
 		default: true,
 	},
 	timerOn : {
-		type: Number,
-		default: 0,
+		type: String,
+		default: '00:00',
 	},
 	timerOff: {
-		type: Number,
-		default: 0,
+		type: String,
+		default: '00:00',
 	},
 	timerState: {
 		type: Boolean,

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 // Action creators.
-import {updateDeviceConfig, getDeviceState} from '../../actions';
+import {updateDeviceConfig, getDeviceState, changeAlias} from '../../actions';
 // React components.
 import DeviceMenu from './DeviceMenu';
 // material-ui components.
@@ -14,7 +14,14 @@ import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import Button from '@material-ui/core/Button';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import TextField from '@material-ui/core/TextField';
+import Fade from '@material-ui/core/Fade';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 // Component style.
 const styles = theme =>
@@ -25,9 +32,12 @@ const styles = theme =>
 		},
 		nameContainer: {
 			margin: 'auto 0',
+			textAlign: 'left',
 		},
 		idText: {
 			margin: 'auto 0',
+			textAlign: 'left',
+			marginLeft: '10px',
 		},
 		card: {
 			padding: theme.spacing(3),
@@ -37,6 +47,7 @@ const styles = theme =>
 		dutyContainer: {
 			padding: theme.spacing(2),
 			textAlign: 'left',
+			marginTop: '24px',
 		},
 		dutyText: {
 			color: '#6c9278',
@@ -45,7 +56,6 @@ const styles = theme =>
 		rangeLabel: {
 			display: 'flex',
 			justifyContent: 'space-between',
-			paddingTop: theme.spacing(2),
 		},
 		switchContainer: {
 			padding: theme.spacing(2),
@@ -71,8 +81,62 @@ const styles = theme =>
 		button: {
 			textAlign: 'center',
 		},
-	});
+		timer: {
+			float: 'left',
+			marginLeft: '40px',
+		},
+		alias: {
+		},
+});
 
+const iOLEDShadow =
+  '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
+
+const IOLEDSlider = withStyles({
+	root: {
+	  	color: '#3880ff',
+	  	height: 2,
+	  	padding: '15px 0',
+	},
+	thumb: {
+		height: 28,
+		width: 28,
+		backgroundColor: '#fff',
+		boxShadow: iOLEDShadow,
+		marginTop: -14,
+		marginLeft: -14,
+		'&:focus,&:hover,&$active': {
+			boxShadow: '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
+			'@media (hover: none)': {
+				boxShadow: iOLEDShadow,
+			},
+		},
+	},
+	active: {},
+	valueLabel: {
+	  	left: 'calc(-50% + 11px)',
+	  	top: -22,
+	  	'& *': {
+			background: 'transparent',
+			color: '#000',
+	  	},
+	},
+	track: {
+	  	height: 2,
+	},
+	rail: {
+	  	height: 2,
+	  	opacity: 0.5,
+	  	backgroundColor: '#bfbfbf',
+	},
+	markActive: {
+	  	opacity: 1,
+	  	backgroundColor: 'currentColor',
+	},
+  })(Slider);
+  
+  
+		  		
 class Device extends Component {
 	// Component state.
 	state = {
@@ -80,7 +144,11 @@ class Device extends Component {
 		snackOpen: false,
 		snackMessage: '',	
 		timerState: true,
-		tempTimer:[this.props.timerOn, this.props.timerOff],	
+		trans: false,
+		tempOn: this.props.timerOn,
+		tempOff: this.props.timerOff,
+		dialogOpen: false, 
+		alias: this.props.alias
 	};
 
 	componentDidMount() {
@@ -89,8 +157,8 @@ class Device extends Component {
 	}
 
 	// Map device state to configuration readable by the backend.
-	stateToConfig = (duty, state, timerOn, timerOff, timerState, deviceId) => {
-		return {config: {duty, state, timerOn, timerOff, timerState}, deviceId};
+	stateToConfig = (duty, state, timerOn, timerOff, timerState, alias, deviceId) => {
+		return {config: {duty, state, timerOn, timerOff, timerState, alias}, deviceId};
 	};
 
 	/* Modify the state of the led to on of off.
@@ -99,8 +167,8 @@ class Device extends Component {
 	 */
 	switchOn = async event => {
 		this.setState({snackOpen: false});
-		const {duty,  timerOn, timerOff, timerState, deviceId, index} = this.props;
-		const deviceConfig = this.stateToConfig(duty, event.target.checked, timerOn, timerOff, timerState, deviceId);
+		const {duty,  timerOn, timerOff, timerState, deviceId, alias, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, event.target.checked, timerOn, timerOff, timerState, alias, deviceId);
 		await this.props.updateDeviceConfig(deviceConfig, index);
 		this.setState({snackOpen: true, snackMessage: 'Dispositivo actualizado'});
 	};
@@ -117,13 +185,15 @@ class Device extends Component {
 
 	sliderOnReleaseHandler = async () => {
 		if (this.state.tempDuty !== this.props.duty) {
+			this.setState({trans:true});
 			this.setState({snackOpen: false});
-			const {state, timerOn, timerOff, timerState, deviceId, index} = this.props;
-			const deviceConfig = this.stateToConfig(this.state.tempDuty, state, timerOn, timerOff, timerState, deviceId);
+			const {state, timerOn, timerOff, timerState, deviceId, alias, index} = this.props;
+			const deviceConfig = this.stateToConfig(this.state.tempDuty, state, timerOn, timerOff, timerState, alias, deviceId);
 			await this.props.updateDeviceConfig(deviceConfig, index);
 			if (this.state.tempDuty !== this.props.duty) {
 				this.setState({tempDuty: this.props.duty});
 			}
+			this.setState({trans:false});
 			this.setState({snackOpen: true, snackMessage: 'Dispositivo actualizado'});
 		}
 	};
@@ -131,45 +201,102 @@ class Device extends Component {
 	// Modify the state of timer state to on to off.
 	switchOnTimer = async event => {
 		this.setState({snackOpen: false});
-		const {duty, state, timerOn, timerOff, deviceId, index} = this.props;
-		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, event.target.checked, deviceId);
+		this.setState({trans:true});
+		const {duty, state, timerOn, timerOff, deviceId, alias, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, event.target.checked, alias, deviceId);
 		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({trans:false});
 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
 	};
 
-	/* Change the timer of Timer.
-	 * Triggers on release inside the slider element and clicking the slider.
-	 */
-	sliderOnChangeHandlerTimer = (event, value) => {
-		if (event.type === 'click') {
-			this.setState({tempTimer: value}, this.sliderOnReleaseHandler);
-		}
-		this.setState({tempTimer: value});
-	};
+	timerOnChange = async event => {
+		this.setState({tempOn: event.target.value});					
+	}
 
-	sliderOnReleaseHandlerTimer = async () => {
-		if (this.state.tempTimer !== this.props.timer) {
-			const {duty, state,timerState, deviceId, index} = this.props;
-			const deviceConfig = this.stateToConfig(duty, state, this.state.tempTimer[1], this.state.tempTimer[0], timerState, deviceId);
-			await this.props.updateDeviceConfig(deviceConfig, index);
-			this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-		}
-	};
+	timerOnRelease = async event => {
+		this.setState({snackOpen: false});
+		this.setState({trans:true});
+		const {duty, state, timerOff, timerState, deviceId, alias, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, this.state.tempOn, timerOff, timerState, alias, deviceId);
+		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({trans:false});
+		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+	}
+
+	timerOffChange = async event => {
+		this.setState({tempOff: event.target.value});					
+	}
+
+	timerOffRelease = async event => {
+		this.setState({snackOpen: false});
+		this.setState({trans:true});
+		const {duty, state, timerOn, timerState, deviceId, alias, index} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, timerOn, this.state.tempOff, timerState, alias, deviceId);
+		await this.props.updateDeviceConfig(deviceConfig, index);
+		this.setState({trans:false});
+		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
+	}
+	
+	handleClickOpen = async event => {
+		this.setState({dialogOpen: true});					
+	}
+
+	handleClose = async event => {
+		this.setState({dialogOpen: false});					
+	}
+
+	handleEdit = async event =>{
+		const {duty, state, timerOn, timerOff, timerState, deviceId} = this.props;
+		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, timerState, this.state.alias, deviceId);
+		await this.props.changeAlias(deviceConfig);
+		this.setState({dialogOpen: false});	
+	}
 
 	// Render the component.
 	render() {
-		const {classes, deviceId, timerState, alias} = this.props;
-		const {snackOpen, snackMessage, tempDuty, tempTimer} = this.state;
+		const {classes, deviceId, timerState} = this.props;
+		const {snackOpen, snackMessage, tempDuty, tempOn, tempOff, trans, dialogOpen, alias} = this.state;
 		const {temp = 0, hum = 0} = this.props;
 
 		return (
-			<Grid item xs={12} md={6}>
+			<Grid item xs={12} md={8}>
+				<Fade in={trans}>		
+					<LinearProgress />
+				</Fade>	
+
 				<Card className={classes.card}>
 					<div className={classes.cardHeader}>
 						<div className={classes.nameContainer}>
-							<Typography variant="subtitle2" align="left">
+
+							<Button variant="text" color="primary" onClick={this.handleClickOpen}>
 								{alias}
-							</Typography>
+							</Button>
+
+							<Dialog open={dialogOpen} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+								<DialogContent>
+									<DialogContentText>
+										Editar el nombre del equipo.
+									</DialogContentText>
+									<TextField
+										autoFocus
+										margin="dense"
+										id="name"
+										label="Nombre equipo"										
+										onChange={text => this.setState({alias: text.target.value})}
+									/>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={this.handleClose} color="primary">
+										Cancelar
+									</Button>
+									<Button onClick={this.handleEdit} color="primary">
+										Editar
+									</Button>
+								</DialogActions>
+							</Dialog>
+							<Typography className={classes.alias}>
+
+							</Typography>							
 							<Typography variant="caption" className={classes.idText}>
 								id: {deviceId}
 							</Typography>
@@ -179,14 +306,15 @@ class Device extends Component {
 
 					{/* Slider */}
 					<div className={classes.dutyContainer}>
-						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
+						{/* <Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
 							Intensidad: {(tempDuty * 100).toFixed()}%
-						</Typography>
-						<Slider
+						</Typography> */}
+						<IOLEDSlider
 							value={tempDuty}
 							min={0}
 							max={1}
 							step={0.05}
+							valueLabelDisplay='on'
 							onChange={this.sliderOnChangeHandler}
 							onChangeCommitted={this.sliderOnReleaseHandler}		// Previous version onDragEnd
 						/>
@@ -222,34 +350,34 @@ class Device extends Component {
 						/>
 					</div>
 
-					{/* Timer slider */}
-					<div className={classes.dutyContainer}>						
-						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
-							Hora On: {(tempTimer[1]).toFixed()} 
-						</Typography>
-						<Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
-							Hora Off: {(tempTimer[0]).toFixed()}
-						</Typography>
-						<Slider			
-							value={tempTimer}
-							valueLabelDisplay="auto"
-							min={0}
-							max={24}
-							onChange={this.sliderOnChangeHandlerTimer}
-							onChangeCommitted={this.sliderOnReleaseHandlerTimer}							
-						/>
-						</div>
-
-					{/* Button upload image */}
-					<div className={classes.button}> 
-						<Button variant="contained" color="default" >
-							Upload
-							<CloudUploadIcon />
-						</Button>
+					<div className={classes.timer}> 
+						<form noValidate>
+							<TextField
+								id="time"
+								label="Encendido"
+								type="time"
+								value={tempOn}										
+								onChange={this.timerOnChange}	
+								onBlur={this.timerOnRelease}															
+							/>
+						</form>					
 					</div>
-					
-				</Card>
 
+					<div className={classes.timer}>
+						<form  noValidate>
+							<TextField
+								id="time"
+								label="Apagado"
+								type="time"
+								value={tempOff}
+								onChange={this.timerOffChange}	
+								onBlur={this.timerOffRelease}										
+							/>
+						</form>
+					</div>
+
+				</Card>
+					
 				<Snackbar
 					anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
 					message={snackMessage}
@@ -269,5 +397,5 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(
 	mapStateToProps,
-	{updateDeviceConfig, getDeviceState}
+	{updateDeviceConfig, getDeviceState, changeAlias}
 )(withStyles(styles)(Device));

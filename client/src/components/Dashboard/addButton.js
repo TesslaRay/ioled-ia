@@ -23,7 +23,10 @@ const styles = {
 };
 
 class DeviceForm extends Component {
-	state = {open: false, deviceId: ''};
+	state = {	
+			open: false, 
+			deviceId: ''
+		};
 
 	registerHandler = () => {
 		this.props.registerDevice(this.state.deviceId);
