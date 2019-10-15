@@ -64,7 +64,7 @@ export const registerDevice = deviceId => async dispatch => {
 
 /**
  * Update a device configuration.
- * @param {{config: {duty: number, state: boolean, timerOn: number, timeOff: number, timerState: boolean, }}} device Device config blob.
+ * @param {{config: {duty: number, state: boolean, timerOn: number, timeOff: number, timerState: boolean, alias: string, }}} device Device config blob.
  * @param {number} index The index of the device in the list.
  */
 export const updateDeviceConfig = (device, index) => async dispatch => {
@@ -108,5 +108,21 @@ export const getDeviceState = (device, index) => async dispatch => {
 			console.log(err);
 		}
 		await sleep(10000);
+	}
+};
+
+
+/**
+ * Change alias ID
+ * @param {string} deviceId The id of the device.
+ * @param {string} alias The new alis of the device
+ */
+export const changeAlias = (device) => async dispatch => {
+	try {
+		// Add await here to wait for the response to update the state of the switch component.
+		await axios.post(`/devices/${device.deviceId}`, {device});
+		dispatch({type: 'UPDATE_ALIAS'});
+	} catch (err) {
+		console.log('Error actualizando alias:', err.response);
 	}
 };

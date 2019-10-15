@@ -30,6 +30,7 @@ const options = ['Eliminar'];
 
 class DeviceMenu extends Component {
 	// The DOM element used to set the position of the menu.
+	
 	state = {
 		anchorEl: null,
 	};
@@ -58,15 +59,19 @@ class DeviceMenu extends Component {
 						className={classes.item}>
 						{option}
 					</MenuItem>
-				);
+					
+					
+				);			 
 			} else {
 				return (
 					<MenuItem key={option} onClick={this.handleClose} className={classes.item}>
 						{option}
 					</MenuItem>
 				);
-			}
+			}			
 		});
+
+		
 	}
 
 	// Render the component.
