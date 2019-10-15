@@ -4,8 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"deploy": "npm run build --prefix client && gcloud app deploy",
-		"deploy-prod": "npm run build --prefix client && gcloud app deploy app-prod.yaml",
+		"deploy": "npm run build --prefix client && gcloud app deploy app-prod.yaml",
 		"start": "node index.js",
 		"server": "nodemon --no-deprecation index.js",
 		"client": "npm run start --prefix client",
