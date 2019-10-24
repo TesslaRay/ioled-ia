@@ -1,24 +1,16 @@
 const multer = require('multer');
+const {sendUploadToGCS} = require('../lib/images');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './resources');
+const storage = multer({
+  storage: multer.MemoryStorage,
+  limits: {
+    fileSize: 25 * 1024 * 1024, // no larger than 25mb
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname );
-  }
 });
 
-
-exports.chargeImage = (req, res) => {
-    const upload = multer({ storage: storage }).single('file')
-
-    upload(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-            return res.status(500).json(err);
-        } else if (err) {
-            return res.status(500).json(err);
-        }
-        return res.status(200).send(req.file);
+exports.chargeImage = (req, res, next) => {
+    const upload = storage.single('file')
+    upload(req, res, function (err) {  
+      sendUploadToGCS(req, res);
     });
 };
