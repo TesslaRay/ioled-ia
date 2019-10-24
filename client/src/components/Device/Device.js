@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
+
 // Action creators.
-import {updateDeviceConfig, getDeviceState, changeAlias} from '../../actions';
+import {updateDeviceConfig, getDeviceState, uploadImage, changeAlias} from '../../actions';
 // React components.
 import DeviceMenu from './DeviceMenu';
 // material-ui components.
@@ -22,6 +23,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 // Component style.
 const styles = theme =>
@@ -47,7 +50,6 @@ const styles = theme =>
 		dutyContainer: {
 			padding: theme.spacing(2),
 			textAlign: 'left',
-			marginTop: '24px',
 		},
 		dutyText: {
 			color: '#6c9278',
@@ -85,7 +87,9 @@ const styles = theme =>
 			float: 'left',
 			marginLeft: '40px',
 		},
-		alias: {
+		upload: {
+			textAlign: 'center',
+			marginTop: '80px',
 		},
 });
 
@@ -134,9 +138,7 @@ const IOLEDSlider = withStyles({
 	  	backgroundColor: 'currentColor',
 	},
   })(Slider);
-  
-  
-		  		
+  	  		
 class Device extends Component {
 	// Component state.
 	state = {
@@ -148,7 +150,8 @@ class Device extends Component {
 		tempOn: this.props.timerOn,
 		tempOff: this.props.timerOff,
 		dialogOpen: false, 
-		alias: this.props.alias
+		alias: this.props.alias,
+		selectedFile: null
 	};
 
 	componentDidMount() {
@@ -211,7 +214,7 @@ class Device extends Component {
 
 	timerOnChange = async event => {
 		this.setState({tempOn: event.target.value});					
-	}
+	};
 
 	timerOnRelease = async event => {
 		this.setState({snackOpen: false});
@@ -221,11 +224,11 @@ class Device extends Component {
 		await this.props.updateDeviceConfig(deviceConfig, index);
 		this.setState({trans:false});
 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-	}
+	};
 
 	timerOffChange = async event => {
 		this.setState({tempOff: event.target.value});					
-	}
+	};
 
 	timerOffRelease = async event => {
 		this.setState({snackOpen: false});
@@ -235,23 +238,34 @@ class Device extends Component {
 		await this.props.updateDeviceConfig(deviceConfig, index);
 		this.setState({trans:false});
 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-	}
+	};
 	
 	handleClickOpen = async event => {
 		this.setState({dialogOpen: true});					
-	}
+	};
 
 	handleClose = async event => {
 		this.setState({dialogOpen: false});					
-	}
+	};
 
 	handleEdit = async event =>{
 		const {duty, state, timerOn, timerOff, timerState, deviceId} = this.props;
 		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, timerState, this.state.alias, deviceId);
 		await this.props.changeAlias(deviceConfig);
 		this.setState({dialogOpen: false});	
-	}
+	};
 
+	onInputSubmit = async event => {	
+		console.log(event.target.files[0]);
+		this.setState({
+			selectedFile: event.target.files[0],
+		});
+		const formData = new FormData();
+		formData.append('file', this.state.selectedFile);
+		await this.props.uploadImage(formData);
+	};
+
+	
 	// Render the component.
 	render() {
 		const {classes, deviceId, timerState} = this.props;
@@ -306,9 +320,6 @@ class Device extends Component {
 
 					{/* Slider */}
 					<div className={classes.dutyContainer}>
-						{/* <Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
-							Intensidad: {(tempDuty * 100).toFixed()}%
-						</Typography> */}
 						<IOLEDSlider
 							value={tempDuty}
 							min={0}
@@ -375,6 +386,31 @@ class Device extends Component {
 							/>
 						</form>
 					</div>
+									
+					<div className={classes.upload}>
+						<Fragment>
+							<input
+								color="primary"
+								accept="image/*"
+								type="file"
+								id="icon-button-file"
+								name="file"
+								// style={{ display: 'none'}}
+								onChange={this.onInputSubmit}
+							/>
+							<label htmlFor="icon-button-file">
+								<Button
+									variant="contained"
+									component="span"
+									className={classes.button}
+									startIcon={<CloudUploadIcon />}
+								>
+									Upload
+								</Button>
+							</label>
+						</Fragment>
+					</div>
+
 
 				</Card>
 					
@@ -397,5 +433,5 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(
 	mapStateToProps,
-	{updateDeviceConfig, getDeviceState, changeAlias}
+	{updateDeviceConfig, getDeviceState, changeAlias, uploadImage}
 )(withStyles(styles)(Device));
