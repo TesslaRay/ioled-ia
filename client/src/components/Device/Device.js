@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
-
 // Action creators.
 import {updateDeviceConfig, getDeviceState, uploadImage, changeAlias} from '../../actions';
 // React components.
@@ -261,11 +260,11 @@ class Device extends Component {
 			selectedFile: event.target.files[0],
 		});
 		const formData = new FormData();
-		formData.append('file', this.state.selectedFile);
+		// formData.append('file', this.state.selectedFile);
+		formData.append('file', event.target.files[0]);
 		await this.props.uploadImage(formData);
 	};
 
-	
 	// Render the component.
 	render() {
 		const {classes, deviceId, timerState} = this.props;
@@ -390,12 +389,12 @@ class Device extends Component {
 					<div className={classes.upload}>
 						<Fragment>
 							<input
-								color="primary"
-								accept="image/*"
+								// color="primary"
+								// accept="image/*"
 								type="file"
 								id="icon-button-file"
 								name="file"
-								// style={{ display: 'none'}}
+								style={{ display: 'none'}}
 								onChange={this.onInputSubmit}
 							/>
 							<label htmlFor="icon-button-file">

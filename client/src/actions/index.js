@@ -128,9 +128,14 @@ export const changeAlias = (device) => async dispatch => {
  * Change alias ID
  * @param {string} inputForm image form
  */
-export const uploadImage = (data) => async dispatch => {
+export const uploadImage = (formdata) => async dispatch => {
 	try {
-		await axios.post('/add', {data});
+		axios({
+			method: 'post',
+			url: '/add',
+			data: formdata,
+			config: { headers: {'Content-Type': 'multipart/form-data' }}
+		});
 		dispatch({type: 'UPLOAD_IMAGE'});
 	} catch (err) {
 		console.log('Error upload image:', err.response);
