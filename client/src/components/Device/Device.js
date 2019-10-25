@@ -161,7 +161,7 @@ class Device extends Component {
 		dialogOpen: false, 
 		alias: this.props.alias,
 		selectedFile: null,
-		URL: null
+		imageURL: null
 	};
 
 	componentDidMount() {
@@ -266,10 +266,17 @@ class Device extends Component {
 	};
 
 	onInputSubmit = async event => {	
-		this.setState({selectedFile: event.target.files[0],});
+		this.setState({
+			selectedFile: event.target.files[0],
+			trans:true
+		});
 		const formData = new FormData();
 		formData.append('file', event.target.files[0]);
-		await this.props.uploadImage(formData);
+		const publicURL = await this.props.uploadImage(formData);
+		this.setState({
+			imageURL: publicURL,
+			trans:false
+		});
 	};
 
 	// Render the component.
@@ -418,7 +425,7 @@ class Device extends Component {
 					</div>
 
 					<Grid item>
-						<img className={classes.img} src={this.state.URL}/>
+						<img className={classes.img} src={this.state.imageURL}/>
 
 						{/* <img  className={classes.img} alt="complex" src={'https://storage.cloud.google.com/ioled-upload/15719650439003.jpeg'} /> */}
 					</Grid>					

@@ -1,5 +1,5 @@
 const multer = require('multer');
-const {sendUploadToGCS} = require('../lib/images');
+const {sendUploadToGCS, getPublicUrl} = require('../lib/images');
 
 const storage = multer({
   storage: multer.MemoryStorage,
@@ -8,10 +8,9 @@ const storage = multer({
   },
 });
 
-exports.chargeImage = (req, res, next) => {
+exports.chargeImage = async (req, res, next) => {
     const upload = storage.single('file');
-    upload(req, res, function (err) { 
-      console.log(req.file);
-      sendUploadToGCS(req, res);
+    await upload(req, res, async function (err) { 
+      await sendUploadToGCS(req, res);
     });
 };

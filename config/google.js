@@ -20,7 +20,8 @@ const config = {
 		registryName: '',
 	},
 	cloudStorage: {
-		cloudBucket: 'gs://ioled-upload'
+		cloudBucket: 'gs://ioled-upload',
+		publicBucket: 'ioled-upload',
 	}
 };
 

@@ -130,13 +130,15 @@ export const changeAlias = (device) => async dispatch => {
  */
 export const uploadImage = (formdata) => async dispatch => {
 	try {
-		axios({
+		const res = await axios({
 			method: 'post',
 			url: '/add',
 			data: formdata,
 			config: { headers: {'Content-Type': 'multipart/form-data' }}
 		});
+		// console.log(res.data.imageURL);
 		dispatch({type: 'UPLOAD_IMAGE'});
+		return res.data.imageURL;
 	} catch (err) {
 		console.log('Error upload image:', err.response);
 	}
