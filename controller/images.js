@@ -10,10 +10,8 @@ const storage = multer({
 
 exports.chargeImage = (req, res, next) => {
     const upload = storage.single('file');
-    
     upload(req, res, function (err) { 
       console.log(req.file);
-
       sendUploadToGCS(req, res);
     });
 };

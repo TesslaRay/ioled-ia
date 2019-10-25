@@ -90,6 +90,16 @@ const styles = theme =>
 			textAlign: 'center',
 			marginTop: '80px',
 		},
+		image: {
+			width: 128,
+			height: 128,
+		  },
+		  img: {
+			margin: 'auto',
+			display: 'block',
+			maxWidth: '100%',
+			maxHeight: '100%',
+		  },
 });
 
 const iOLEDShadow =
@@ -150,7 +160,8 @@ class Device extends Component {
 		tempOff: this.props.timerOff,
 		dialogOpen: false, 
 		alias: this.props.alias,
-		selectedFile: null
+		selectedFile: null,
+		URL: null
 	};
 
 	componentDidMount() {
@@ -255,12 +266,8 @@ class Device extends Component {
 	};
 
 	onInputSubmit = async event => {	
-		console.log(event.target.files[0]);
-		this.setState({
-			selectedFile: event.target.files[0],
-		});
+		this.setState({selectedFile: event.target.files[0],});
 		const formData = new FormData();
-		// formData.append('file', this.state.selectedFile);
 		formData.append('file', event.target.files[0]);
 		await this.props.uploadImage(formData);
 	};
@@ -410,6 +417,11 @@ class Device extends Component {
 						</Fragment>
 					</div>
 
+					<Grid item>
+						<img className={classes.img} src={this.state.URL}/>
+
+						{/* <img  className={classes.img} alt="complex" src={'https://storage.cloud.google.com/ioled-upload/15719650439003.jpeg'} /> */}
+					</Grid>					
 
 				</Card>
 					
