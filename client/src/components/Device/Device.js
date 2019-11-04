@@ -25,6 +25,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
+import {Bar} from 'react-chartjs-2';
+// import 'chartjs-plugin-annotation';
+
 // Component style.
 const styles = theme =>
 	createStyles({
@@ -71,6 +74,14 @@ const styles = theme =>
 			alignSelf: 'flex-end',
 			color: 'green',
 		},
+		energyText: {
+			color: 'blue',
+			textAlign: 'center',
+		},
+		consumptionText: {
+			color: 'black',
+			textAlign: 'center',
+		},
 		humContainer: {
 			padding: theme.spacing(2),
 			display: 'flex',
@@ -93,13 +104,20 @@ const styles = theme =>
 		image: {
 			width: 128,
 			height: 128,
+			marginTop: '30px',
 		  },
-		  img: {
+		img: {
+			marginTop: '20px',
 			margin: 'auto',
 			display: 'block',
 			maxWidth: '100%',
 			maxHeight: '100%',
-		  },
+		},
+		iaText: {
+			color: '#2001FE',
+			textAlign: 'center',
+			marginTop: '30px',	
+		}
 });
 
 const iOLEDShadow =
@@ -161,7 +179,10 @@ class Device extends Component {
 		dialogOpen: false, 
 		alias: this.props.alias,
 		selectedFile: null,
-		imageURL: null
+		imageURL: null,
+		rec: '',
+		recDuty: 0,
+		photoperiod: ''
 	};
 
 	componentDidMount() {
@@ -273,17 +294,24 @@ class Device extends Component {
 		const formData = new FormData();
 		formData.append('file', event.target.files[0]);
 		const publicURL = await this.props.uploadImage(formData);
+		console.log(publicURL);
 		this.setState({
 			imageURL: publicURL,
-			trans:false
+			trans:false,
+			recDuty: 30,
+			photoperiod: '18 horas encendido /6 horas apagado'
 		});
+
 	};
 
 	// Render the component.
 	render() {
 		const {classes, deviceId, timerState} = this.props;
-		const {snackOpen, snackMessage, tempDuty, tempOn, tempOff, trans, dialogOpen, alias} = this.state;
 		const {temp = 0, hum = 0} = this.props;
+
+		const{snackOpen, snackMessage, tempDuty, tempOn} = this.state;
+		const{tempOff, trans, dialogOpen, alias} = this.state;
+		const{rec, recDuty, photoperiod} = this.state;
 
 		return (
 			<Grid item xs={12} md={8}>
@@ -346,7 +374,16 @@ class Device extends Component {
 							<Typography variant="subtitle2">0%</Typography>
 							<Typography variant="subtitle2">100%</Typography>
 						</div>
-					</div>					
+					</div>		
+					
+					<div>
+						<Typography className={classes.consumptionText} variant="subtitle2" gutterBottom>
+							Consumo: 
+						</Typography>
+						<Typography className={classes.energyText} variant="h6" gutterBottom>
+							{tempDuty*300} W
+						</Typography>
+					</div>			
 
 					<div className={classes.humContainer}>
 						<Typography className={classes.switchText} variant="subtitle1" gutterBottom>
@@ -403,8 +440,6 @@ class Device extends Component {
 					<div className={classes.upload}>
 						<Fragment>
 							<input
-								// color="primary"
-								// accept="image/*"
 								type="file"
 								id="icon-button-file"
 								name="file"
@@ -426,10 +461,17 @@ class Device extends Component {
 
 					<Grid item>
 						<img className={classes.img} src={this.state.imageURL}/>
+					</Grid>	
 
-						{/* <img  className={classes.img} alt="complex" src={'https://storage.cloud.google.com/ioled-upload/15719650439003.jpeg'} /> */}
-					</Grid>					
-
+					<div>
+						<Typography className={classes.iaText} variant="subtitle1" gutterBottom>
+							Recomendación: {recDuty.toFixed(0)} %
+						</Typography>
+						<Typography className={classes.iaText} variant="subtitle1" gutterBottom>
+							Ciclo: {photoperiod} 
+						</Typography>
+					</div>
+							
 				</Card>
 					
 				<Snackbar

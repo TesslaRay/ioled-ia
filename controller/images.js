@@ -23,12 +23,11 @@ const storage = multer.diskStorage({
 
 exports.chargeImage = async (req, res) => {
     const upload = temporalStorage.single('file');
-
     const saveImage = multer({ storage: storage }).single('file')
 
-    await saveImage(req, res, function (err) {  
-      predictWithImage(req.file.path);
-      fs.unlinkSync(req.file.path); 
+    await saveImage(req, res, async function () {  
+      predict = await predictWithImage(req.file.path);
+      fs.unlinkSync(req.file.path);
     });
     
     await upload(req, res, async function (err) { 

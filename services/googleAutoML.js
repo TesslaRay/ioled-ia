@@ -37,7 +37,5 @@ exports.predictWithImage = async (req, res) => {
             payload: payload,
             params: params,
         });
-        console.log('Prediction results');
-        console.log(response);
-    
+        return response.payload;
 };
