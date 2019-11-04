@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 // Action creators.
-import {updateDeviceConfig, getDeviceState, changeAlias} from '../../actions';
+import {updateDeviceConfig, getDeviceState, uploadImage, changeAlias} from '../../actions';
 // React components.
 import DeviceMenu from './DeviceMenu';
 // material-ui components.
@@ -22,6 +22,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+
+import {Bar} from 'react-chartjs-2';
+// import 'chartjs-plugin-annotation';
 
 // Component style.
 const styles = theme =>
@@ -47,7 +52,6 @@ const styles = theme =>
 		dutyContainer: {
 			padding: theme.spacing(2),
 			textAlign: 'left',
-			marginTop: '24px',
 		},
 		dutyText: {
 			color: '#6c9278',
@@ -70,6 +74,14 @@ const styles = theme =>
 			alignSelf: 'flex-end',
 			color: 'green',
 		},
+		energyText: {
+			color: 'blue',
+			textAlign: 'center',
+		},
+		consumptionText: {
+			color: 'black',
+			textAlign: 'center',
+		},
 		humContainer: {
 			padding: theme.spacing(2),
 			display: 'flex',
@@ -85,8 +97,27 @@ const styles = theme =>
 			float: 'left',
 			marginLeft: '40px',
 		},
-		alias: {
+		upload: {
+			textAlign: 'center',
+			marginTop: '80px',
 		},
+		image: {
+			width: 128,
+			height: 128,
+			marginTop: '30px',
+		  },
+		img: {
+			marginTop: '20px',
+			margin: 'auto',
+			display: 'block',
+			maxWidth: '100%',
+			maxHeight: '100%',
+		},
+		iaText: {
+			color: '#2001FE',
+			textAlign: 'center',
+			marginTop: '30px',	
+		}
 });
 
 const iOLEDShadow =
@@ -134,9 +165,7 @@ const IOLEDSlider = withStyles({
 	  	backgroundColor: 'currentColor',
 	},
   })(Slider);
-  
-  
-		  		
+  	  		
 class Device extends Component {
 	// Component state.
 	state = {
@@ -148,7 +177,12 @@ class Device extends Component {
 		tempOn: this.props.timerOn,
 		tempOff: this.props.timerOff,
 		dialogOpen: false, 
-		alias: this.props.alias
+		alias: this.props.alias,
+		selectedFile: null,
+		imageURL: null,
+		rec: '',
+		recDuty: 0,
+		photoperiod: ''
 	};
 
 	componentDidMount() {
@@ -211,7 +245,7 @@ class Device extends Component {
 
 	timerOnChange = async event => {
 		this.setState({tempOn: event.target.value});					
-	}
+	};
 
 	timerOnRelease = async event => {
 		this.setState({snackOpen: false});
@@ -221,11 +255,11 @@ class Device extends Component {
 		await this.props.updateDeviceConfig(deviceConfig, index);
 		this.setState({trans:false});
 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-	}
+	};
 
 	timerOffChange = async event => {
 		this.setState({tempOff: event.target.value});					
-	}
+	};
 
 	timerOffRelease = async event => {
 		this.setState({snackOpen: false});
@@ -235,28 +269,49 @@ class Device extends Component {
 		await this.props.updateDeviceConfig(deviceConfig, index);
 		this.setState({trans:false});
 		this.setState({snackOpen: true, snackMessage: 'Timer actualizado'});
-	}
+	};
 	
 	handleClickOpen = async event => {
 		this.setState({dialogOpen: true});					
-	}
+	};
 
 	handleClose = async event => {
 		this.setState({dialogOpen: false});					
-	}
+	};
 
 	handleEdit = async event =>{
 		const {duty, state, timerOn, timerOff, timerState, deviceId} = this.props;
 		const deviceConfig = this.stateToConfig(duty, state, timerOn, timerOff, timerState, this.state.alias, deviceId);
 		await this.props.changeAlias(deviceConfig);
 		this.setState({dialogOpen: false});	
-	}
+	};
+
+	onInputSubmit = async event => {	
+		this.setState({
+			selectedFile: event.target.files[0],
+			trans:true
+		});
+		const formData = new FormData();
+		formData.append('file', event.target.files[0]);
+		const publicURL = await this.props.uploadImage(formData);
+		console.log(publicURL);
+		this.setState({
+			imageURL: publicURL,
+			trans:false,
+			recDuty: 30,
+			photoperiod: '18 horas encendido /6 horas apagado'
+		});
+
+	};
 
 	// Render the component.
 	render() {
 		const {classes, deviceId, timerState} = this.props;
-		const {snackOpen, snackMessage, tempDuty, tempOn, tempOff, trans, dialogOpen, alias} = this.state;
 		const {temp = 0, hum = 0} = this.props;
+
+		const{snackOpen, snackMessage, tempDuty, tempOn} = this.state;
+		const{tempOff, trans, dialogOpen, alias} = this.state;
+		const{rec, recDuty, photoperiod} = this.state;
 
 		return (
 			<Grid item xs={12} md={8}>
@@ -306,9 +361,6 @@ class Device extends Component {
 
 					{/* Slider */}
 					<div className={classes.dutyContainer}>
-						{/* <Typography className={classes.dutyText} variant="subtitle1" gutterBottom>
-							Intensidad: {(tempDuty * 100).toFixed()}%
-						</Typography> */}
 						<IOLEDSlider
 							value={tempDuty}
 							min={0}
@@ -322,7 +374,16 @@ class Device extends Component {
 							<Typography variant="subtitle2">0%</Typography>
 							<Typography variant="subtitle2">100%</Typography>
 						</div>
-					</div>					
+					</div>		
+					
+					<div>
+						<Typography className={classes.consumptionText} variant="subtitle2" gutterBottom>
+							Consumo: 
+						</Typography>
+						<Typography className={classes.energyText} variant="h6" gutterBottom>
+							{tempDuty*300} W
+						</Typography>
+					</div>			
 
 					<div className={classes.humContainer}>
 						<Typography className={classes.switchText} variant="subtitle1" gutterBottom>
@@ -375,7 +436,42 @@ class Device extends Component {
 							/>
 						</form>
 					</div>
+									
+					<div className={classes.upload}>
+						<Fragment>
+							<input
+								type="file"
+								id="icon-button-file"
+								name="file"
+								style={{ display: 'none'}}
+								onChange={this.onInputSubmit}
+							/>
+							<label htmlFor="icon-button-file">
+								<Button
+									variant="contained"
+									component="span"
+									className={classes.button}
+									startIcon={<CloudUploadIcon />}
+								>
+									Upload
+								</Button>
+							</label>
+						</Fragment>
+					</div>
 
+					<Grid item>
+						<img className={classes.img} src={this.state.imageURL}/>
+					</Grid>	
+
+					<div>
+						<Typography className={classes.iaText} variant="subtitle1" gutterBottom>
+							Recomendación: {recDuty.toFixed(0)} %
+						</Typography>
+						<Typography className={classes.iaText} variant="subtitle1" gutterBottom>
+							Ciclo: {photoperiod} 
+						</Typography>
+					</div>
+							
 				</Card>
 					
 				<Snackbar
@@ -397,5 +493,5 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(
 	mapStateToProps,
-	{updateDeviceConfig, getDeviceState, changeAlias}
+	{updateDeviceConfig, getDeviceState, changeAlias, uploadImage}
 )(withStyles(styles)(Device));

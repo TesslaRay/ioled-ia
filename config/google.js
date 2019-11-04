@@ -3,6 +3,7 @@
  * @namespace config
  * @property {Object} api Google cloud api config.
  * @property {Object} iotCore Google IoT core config.
+ * @property {Object} cloudStorage Google cloud storage core config.
  */
 const config = {
 	/** */
@@ -18,6 +19,10 @@ const config = {
 		parentName: '',
 		registryName: '',
 	},
+	cloudStorage: {
+		cloudBucket: 'gs://ioled-upload',
+		publicBucket: 'ioled-upload',
+	}
 };
 
 config.iotCore.parentName = `projects/${config.iotCore.projectId}/locations/${config.iotCore.cloudRegion}`;

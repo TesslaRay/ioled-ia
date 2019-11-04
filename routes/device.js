@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const {listDevices, newDevice, updateDeviceConfig, deleteDevice, getDeviceState, changeAlias} = require('../controller/device');
-const {noUser, deviceConfigLimit, deviceStateLimit} = require('../controller/handlers');
+const {noUser, deviceStateLimit} = require('../controller/handlers');
 
 router
 	.route('/devices')
@@ -16,6 +16,5 @@ router
 	.delete(deleteDevice)
 	.put(updateDeviceConfig)
 	.post(changeAlias);
-	
 
 module.exports = router;

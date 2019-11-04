@@ -111,18 +111,50 @@ export const getDeviceState = (device, index) => async dispatch => {
 	}
 };
 
-
 /**
  * Change alias ID
  * @param {string} deviceId The id of the device.
- * @param {string} alias The new alis of the device
  */
 export const changeAlias = (device) => async dispatch => {
 	try {
-		// Add await here to wait for the response to update the state of the switch component.
 		await axios.post(`/devices/${device.deviceId}`, {device});
 		dispatch({type: 'UPDATE_ALIAS'});
 	} catch (err) {
 		console.log('Error actualizando alias:', err.response);
 	}
 };
+
+/**
+ * Change alias ID
+ * @param {string} inputForm image form
+ */
+export const uploadImage = (formdata) => async dispatch => {
+	try {
+		const res = await axios({
+			method: 'post',
+			url: '/add',
+			data: formdata,
+			config: { headers: {'Content-Type': 'multipart/form-data' }}
+		});
+		// console.log(res.data.imageURL);
+		dispatch({type: 'UPLOAD_IMAGE'});
+		return res.data.imageURL;
+	} catch (err) {
+		console.log('Error upload image:', err.response);
+	}
+};
+
+// /**
+//  * Predict with images
+//  * @param {string} Image The path of the images to predict
+//  */
+// export const predictWithImage = (imagePath) => async dispatch => {
+// 	try {
+// 		await axios.post('/predict', {imagePath});
+// 		dispatch({type: 'PREDICT_IMAGE'});
+// 	} catch (err) {
+// 		console.log('Error predict image', err.response);
+// 	}
+// };
+
+

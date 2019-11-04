@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const {getClient, getIotCoreDevices, sendIotCoreDeviceConfig, getIoTCoreDeviceState} = require('../services/googleCloud');
+const {getClient, getIotCoreDevices ,sendIotCoreDeviceConfig, getIoTCoreDeviceState} = require('../services/googleCloud');
 
 /**
  * Get the list of the devices registered in iot core.

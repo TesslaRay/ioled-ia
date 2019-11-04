@@ -26,7 +26,7 @@ module.exports = app => {
 			name: 'session',
 
 			// Time to expire in ms.
-			maxAge: 60 * 60 * 1000,
+			maxAge: 24 * 60 * 60 * 1000,
 			// Key to encrypt the cookie.
 			keys: [keys.cookieKey],
 			//secure: true,
