@@ -25,9 +25,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-import {Bar} from 'react-chartjs-2';
-// import 'chartjs-plugin-annotation';
-
 // Component style.
 const styles = theme =>
 	createStyles({
@@ -180,7 +177,6 @@ class Device extends Component {
 		alias: this.props.alias,
 		selectedFile: null,
 		imageURL: null,
-		rec: '',
 		recDuty: 0,
 		photoperiod: ''
 	};
@@ -301,7 +297,6 @@ class Device extends Component {
 			recDuty: 30,
 			photoperiod: '18 horas encendido /6 horas apagado'
 		});
-
 	};
 
 	// Render the component.
@@ -311,7 +306,7 @@ class Device extends Component {
 
 		const{snackOpen, snackMessage, tempDuty, tempOn} = this.state;
 		const{tempOff, trans, dialogOpen, alias} = this.state;
-		const{rec, recDuty, photoperiod} = this.state;
+		const{recDuty, photoperiod} = this.state;
 
 		return (
 			<Grid item xs={12} md={8}>

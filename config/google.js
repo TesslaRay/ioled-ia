@@ -13,7 +13,7 @@ const config = {
 	},
 	iotCore: {
 		cloudRegion: 'us-central1',
-		projectId: 'ioled-dev-248517',
+		projectId: 'ioled-dev-262215',
 		registryId: 'ioled-devices',
 		version: 0,
 		parentName: '',

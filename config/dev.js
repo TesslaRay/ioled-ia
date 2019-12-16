@@ -7,8 +7,8 @@
  * @param cookieKey - encryption key used for serialize user in passport.js.
  */
 module.exports = {
-	googleClientID: '1078573493253-sfi309avlkufe8oiqbgre2qdppna5183.apps.googleusercontent.com',
-	googleClientSecret: 'OgKFigx0LevXFSWial-l_EZ7',
-	mongoURI: 'mongodb+srv://tessla:macarena100@ioled-cluster-xkzhy.gcp.mongodb.net/test?retryWrites=true&w=majority',
+	googleClientID: '384917616977-ki9fleqmcg3crte84alco425emkqpm05.apps.googleusercontent.com',
+	googleClientSecret: '3Umot6DDe2pmIwp_lq-H7EH7',
+	mongoURI: 'mongodb+srv://ioled:10L3D2019%21@ioled-cluster-biief.gcp.mongodb.net/test?retryWrites=true&w=majority',
 	cookieKey: 'ioled'
 };
