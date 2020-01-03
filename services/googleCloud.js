@@ -27,7 +27,7 @@ exports.getClient = async () => {
 };
 
 /**
- * @description Return the list of devices registered in google cloud iot.
+ * @description Return the list of devices registered in Google Cloud IoT core.
  * @param {Object} client - The google cloud client.
  * @returns {Promise<Object[]>} Returns the list of devices.
  */
