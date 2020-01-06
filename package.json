@@ -8,9 +8,11 @@
 		"start": "node index.js",
 		"server": "nodemon --no-deprecation index.js",
 		"client": "npm run start --prefix client",
-		"dev": "concurrently \"npm run server\" \"npm run client\""
+		"client2": "npm run start --prefix client2",
+		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"dev2": "concurrently \"npm run server\" \"npm run client2\""
 	},
-	"author": "Eduardo Hales/Cristian Valdivia",
+	"author": "Cristian Valdivia",
 	"license": "ISC",
 	"dependencies": {
 		"@google-cloud/automl": "^1.7.2",
