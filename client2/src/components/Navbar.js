@@ -1,5 +1,8 @@
 //@ts-nocheck
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+
+// Import images
 import ioledLogo from '../images/logo.png';
 
 // material-ui components.
@@ -7,6 +10,8 @@ import {withStyles, createStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Material-ui component styles.
 const styles = () =>
@@ -15,11 +20,11 @@ const styles = () =>
 			position: 'relative',
 		},
 		appbar: {
-			backgroundColor: '#2C3145',
-			borderRadius: '0px 0px 5px 5px',
+			backgroundColor: 'blue',
+			borderRadius: '0px 0px 0px ppx',
 		},
 		logo: {
-			width: '110px',
+			width: '140px',
 			margin: '-10px',
 		},
 		avatar: {
@@ -30,7 +35,7 @@ const styles = () =>
 			color: 'light-green',
 		},
 		circular: {
-			color: 'green',
+			color: 'red',
 		},
 		logout: {
 			color: '#6B757E',
@@ -46,6 +51,32 @@ class Navbar extends Component {
 	capitalize(str) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	}	
+
+	// Render the navbar depending the auth state.
+	authRender() {
+		const {classes, user} = this.props;
+		switch (user) {
+			case null:
+				return (
+					<Fragment>
+						<CircularProgress className={classes.circular} />
+					</Fragment>
+				);
+			case false:
+				return (
+					<Fragment>
+						<Button href="/auth/google">Login with Google</Button>
+					</Fragment>
+				);
+			default:
+				return (
+					<Fragment>
+						<Avatar className={classes.avatar} alt={user.name} src={user.photo} />
+					</Fragment>
+				);
+		}
+	}
+
 	// Render the component.
 	render() {
 		const {classes, user} = this.props;
@@ -53,19 +84,13 @@ class Navbar extends Component {
 			<div className={classes.root}>
 				<AppBar className={classes.appbar} position="static">
 					<Toolbar>
-						{/* Lado izquierdo del nabvar*/}
+						{/* Left side nabvar*/}
 						<a href={user ? '/dashboard' : '/'} style={{flexGrow: 1}}>
 							<img className={classes.logo} src={ioledLogo} alt="ioled" />
-						</a>
-
-						{/*Lado derecho del navBar*/}
-						<a href='https://ioled-dev-248517.appspot.com/' style={{flexgrow: 1}}>
-							<Button className={classes.button}>Mi iOLED</Button>
-						</a>
-						<a href='https://www.ioled.cl/' style={{flexgrow: 1}}>
-							<Button className={classes.button}>WEB iOLED</Button>
-						</a>
-
+						</a>	
+						
+						{/* Rigth side nabvar*/}
+						{this.authRender()}																		
 					</Toolbar>
 				</AppBar>
 			</div>
@@ -73,4 +98,8 @@ class Navbar extends Component {
 	}
 }
 
-export default (withStyles(styles)(Navbar));
+const mapStateToProps = ({user}) => {
+	return {user};
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(Navbar));
