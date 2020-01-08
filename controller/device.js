@@ -55,13 +55,14 @@ exports.updateDeviceConfig = async (req, res) => {
 	// Get the deviceid and config from the request body.
 	let config;
 	const deviceId = req.params.id;
+	console.log(req.body);
 	try {
 		({config} = req.body.device);
 	} catch (err) {
 		return res.status(400).send({status: 400});
 	}
 	console.log('Sending config ...');
-	// Send the configuration to google iot core.
+	// Send the configuration to google IoT core.
 	const status = await sendGoogleDeviceConfig(deviceId, config);
 	console.log('Response:', status);
 	// If configuration is ok, then update the config in the database.
