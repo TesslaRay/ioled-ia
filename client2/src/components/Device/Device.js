@@ -34,11 +34,12 @@ const styles = (theme) =>
     cardHeader: {
       display: 'flex',
       justifyContent: 'space-between',
-      backgroundColor: 'red',
+      backgroundColor: '#1A191E',
     },
     nameContainer: {
       margin: 'auto 0',
       textAlign: 'left',
+      color: '#FFFFFF',
     },
     idText: {
       margin: 'auto 0',
@@ -48,7 +49,7 @@ const styles = (theme) =>
     card: {
       padding: theme.spacing(1),
       textAlign: 'left',
-      backgroundColor: '#2F4F4F',
+      backgroundColor: '#323039',
       height: '70vh',
     },
     dutyContainer: {

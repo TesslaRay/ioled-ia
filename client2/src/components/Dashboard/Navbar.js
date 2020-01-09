@@ -17,7 +17,7 @@ const styles = () =>
       position: 'relative',
     },
     appbar: {
-      backgroundColor: '#808080	',
+      backgroundColor: '#323039',
     },
     logo: {
       width: '150px',
