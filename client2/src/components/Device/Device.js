@@ -5,28 +5,17 @@ import {connect} from 'react-redux';
 import {updateDeviceConfig, getDeviceState, changeAlias} from '../../actions';
 
 // React components.
-import DeviceMenu from './DeviceMenu';
 import StateContainer from './StateContainer';
+import AliasContainer from './AliasContainer';
 
 import Swal from 'sweetalert2';
 
 // material-ui components.
 import {withStyles, createStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import Container from '@material-ui/core/Container';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-import Snackbar from '@material-ui/core/Snackbar';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Fade from '@material-ui/core/Fade';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 
 // Component style.
 const styles = (theme) =>
@@ -38,33 +27,13 @@ const styles = (theme) =>
     },
     nameContainer: {
       margin: 'auto 0',
-      textAlign: 'left',
+      textAlign: 'rigth',
       color: '#FFFFFF',
     },
-    idText: {
-      margin: 'auto 0',
-      textAlign: 'left',
-      marginLeft: '10px',
-    },
-    card: {
+    aliasContainer: {
       padding: theme.spacing(1),
-      textAlign: 'left',
+      textAlign: 'center',
       backgroundColor: '#323039',
-      height: '70vh',
-    },
-    dutyContainer: {
-      padding: theme.spacing(2),
-      textAlign: 'left',
-      backgroundColor: 'black',
-    },
-    dutyText: {
-      color: '#6c9278',
-      marginBottom: '16px',
-    },
-    rangeLabel: {
-      color: 'white',
-      display: 'flex',
-      justifyContent: 'space-between',
     },
   });
 
@@ -134,10 +103,6 @@ class Device extends Component {
         this.setState({tempDuty: this.props.duty});
       }
       this.setState({trans: false});
-      // this.setState({
-      //   snackOpen: true,
-      //   snackMessage: 'Dispositivo actualizado',
-      // });
 
       Swal.fire({
         icon: 'success',
@@ -160,68 +125,7 @@ class Device extends Component {
           <LinearProgress />
         </Fade>
 
-        <Card className={classes.card}>
-          <div className={classes.cardHeader}>
-            <div className={classes.nameContainer}>
-              <Button variant="text" color="primary" onClick={this.handleClickOpen}>
-                {alias}
-              </Button>
-
-              <Dialog open={dialogOpen} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogContent>
-                  <DialogContentText>Editar el nombre del equipo.</DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Nombre equipo"
-                    onChange={(text) => this.setState({alias: text.target.value})}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleClose} color="primary">
-                    Cancelar
-                  </Button>
-                  <Button onClick={this.handleEdit} color="primary">
-                    Editar
-                  </Button>
-                </DialogActions>
-              </Dialog>
-
-              <Typography className={classes.alias}></Typography>
-            </div>
-            <DeviceMenu deviceId={deviceId} />
-          </div>
-
-          {/* <StateContainer /> */}
-
-          {/* Slider */}
-          <div className={classes.dutyContainer}>
-            <Slider
-              value={tempDuty}
-              min={0}
-              max={1}
-              step={0.05}
-              valueLabelDisplay="auto"
-              onChange={this.sliderOnChangeHandler}
-              onChangeCommitted={this.sliderOnReleaseHandler} // Previous version onDragEnd
-            />
-            <div className={classes.rangeLabel}>
-              <Typography variant="subtitle2">0%</Typography>
-              <Typography variant="subtitle2">100%</Typography>
-            </div>
-          </div>
-        </Card>
-
-        <Snackbar
-          anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-          message={snackMessage}
-          onClose={() => {
-            this.setState({snackOpen: false});
-          }}
-          open={snackOpen}
-        />
-        {/* </Grid> */}
+        <AliasContainer />
       </Container>
     );
   }

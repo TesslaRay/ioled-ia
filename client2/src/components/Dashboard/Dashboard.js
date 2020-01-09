@@ -9,7 +9,7 @@ import SimpleBottomNavigation from './SimpleBottom';
 // Dashboard component styles.
 const styles = (theme) => ({
   root: {
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#1A191E',
     height: '90vh',
   },
 });
