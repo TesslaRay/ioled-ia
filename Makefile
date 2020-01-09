@@ -21,12 +21,12 @@ init i:
 clean c:
 	@echo "[clean] cleaning..."
 
-run r:
-	@echo "[running] Running nodejs and React..."
-	@npm run dev
+server s:
+	@echo "[running] Running nodejs..."
+	@npm run server
 
 dev d:
-	@echo "[running] Running nodejs and Reac..."
+	@echo "[running] Running nodejs and React 2..."
 	@npm run dev2
 
 .PHONY: version v prepare pre clean c run r stop s
