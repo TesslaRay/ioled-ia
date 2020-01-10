@@ -1,73 +1,102 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-
-// Action creators.
-import {getDeviceState} from '../../actions';
 
 // material-ui components.
 import {withStyles, createStyles} from '@material-ui/core/styles';
+import {Box} from '@material-ui/core';
+
+import FlashOnIcon from '@material-ui/icons/FlashOn';
+import CloudIcon from '@material-ui/icons/Cloud';
 import Typography from '@material-ui/core/Typography';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 
 // Component style.
 const styles = (theme) =>
   createStyles({
-    energyText: {
+    stateContainer: {
       color: 'blue',
       textAlign: 'center',
-    },
-    humContainer: {
-      padding: theme.spacing(2),
+      backgroundColor: '#1A191E',
+      marginTop: '8px',
       display: 'flex',
+      padding: theme.spacing(1),
+    },
+    powerContainer: {
+      backgroundColor: '#323039',
     },
     tempContainer: {
-      padding: theme.spacing(2),
+      backgroundColor: '#323039',
+      marginRight: '5px',
+      marginLeft: '5px',
+    },
+    humContainer: {
+      backgroundColor: '#323039',
+    },
+    stateIcon: {
+      marginTop: '11px',
+    },
+    state: {
+      color: 'white',
       display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    stateNumber: {
+      fontSize: '24px',
+    },
+    stateUnity: {
+      fontSize: '12px',
+    },
+    stateText: {
+      color: 'white',
+      fontSize: '11px',
     },
   });
 
-class Statecontainer extends Component {
-  // componentDidMount() {
-  //   const {deviceId, index} = this.props;
-  //   this.props.getDeviceState({deviceId}, index);
-  // }
-
+class StateContainer extends Component {
   render() {
     const {temp = 0, hum = 0, classes} = this.props;
 
     return (
-      <div>
-        <Typography className={classes.switchText} variant="subtitle1" gutterBottom>
-          {hum.toFixed(2)} %
-        </Typography>
-      </div>
+      <Box width="100%" className={classes.stateContainer}>
+        <Box width="33%" className={classes.powerContainer} borderRadius={12}>
+          <div className={classes.stateIcon}>
+            <FlashOnIcon color="secondary" />
+          </div>
+          <div className={classes.state}>
+            <Typography className={classes.stateNumber} variant="h6">
+              300
+            </Typography>
+            <Typography className={classes.stateUnity}> W</Typography>
+          </div>
+          <Typography className={classes.stateText}>Consumo</Typography>
+        </Box>
+
+        <Box width="33%" className={classes.tempContainer} borderRadius={12}>
+          <div className={classes.stateIcon}>
+            <BeachAccessIcon color="secondary" />
+          </div>
+          <div className={classes.state}>
+            <Typography className={classes.stateNumber} fontWeight="fontWeightBold">
+              21
+            </Typography>
+            <Typography className={classes.stateUnity}> ºC</Typography>
+          </div>
+          <Typography className={classes.stateText}>Temperatura</Typography>
+        </Box>
+
+        <Box width="33%" className={classes.humContainer} borderRadius={12}>
+          <div className={classes.stateIcon}>
+            <CloudIcon color="secondary" />
+          </div>
+          <div className={classes.state}>
+            <Typography className={classes.stateNumber}>42</Typography>
+            <Typography className={classes.stateUnity}> %</Typography>
+          </div>
+          <Typography className={classes.stateText}>Humedad</Typography>
+        </Box>
+      </Box>
     );
-
-    // return (
-    //   <div>
-    //     <Typography className={classes.energyText} variant="h6" gutterBottom>
-    //       {tempDuty * 300} W
-    //     </Typography>
-    //   </div>
-
-    //   <div className={classes.humContainer}>
-    //     <Typography className={classes.switchText} variant="subtitle1" gutterBottom>
-    //       {hum.toFixed(2)} %
-    //     </Typography>
-    //   </div>
-
-    //   <div className={classes.tempContainer}>
-    //     <Typography className={classes.switchText} variant="subtitle1" gutterBottom>
-    //       {temp.toFixed(2)} ºC
-    //     </Typography>
-    //   </div>
-    // );
   }
 }
 
-// const mapStateToProps = (state, ownProps) => {
-//   return state.devices[ownProps.index];
-// };
-
-// export default connect(mapStateToProps, {
-//   getDeviceState,
-// })(withStyles(styles)(Statecontainer));
+export default withStyles(styles)(StateContainer);

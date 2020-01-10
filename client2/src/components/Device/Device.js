@@ -126,6 +126,8 @@ class Device extends Component {
         </Fade>
 
         <AliasContainer />
+
+        <StateContainer />
       </Container>
     );
   }
