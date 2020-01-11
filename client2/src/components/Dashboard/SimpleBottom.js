@@ -6,12 +6,34 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import CameraIcon from '@material-ui/icons/Camera';
+import { Box } from '@material-ui/core';
+import { flexbox } from '@material-ui/system';
+
+//icon API
+import { Icon } from '@material-ui/core';
+
 
 const useStyles = makeStyles({
   root: {
-    position: 'bottom',
+    position: 'botton',
     backgroundColor: '#222128;',
+    color: '#FFFFFF',
+    borderRadius: 24,
+    margin: 3,
+    alignItems: 'center',
+    alignContent: 'center',
+
+    
   },
+  simpleBox:{
+    height: 'fit',
+    display: 'flex',
+    justifyContent: 'center',
+    
+  },
+  MuiIcon:{
+    colorSecondary:'#FFFFFF',
+  }
 });
 
 export default function SimpleBottomNavigation() {
@@ -19,17 +41,19 @@ export default function SimpleBottomNavigation() {
   const [value, setValue] = React.useState(0);
 
   return (
-    <BottomNavigation
-      value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
-      showLabels
-      className={classes.root}
-    >
-      <BottomNavigationAction icon={<HomeIcon color="secondary" />} />
-      <BottomNavigationAction icon={<BarChartIcon color="secondary" />} />
-      <BottomNavigationAction icon={<CameraIcon color="secondary" />} />
-    </BottomNavigation>
+    <Box className={classes.simpleBox}>
+      <BottomNavigation
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        showLabels
+        className={classes.root}
+      >
+        <BottomNavigationAction icon={<HomeIcon color="primary" />} />
+        <BottomNavigationAction icon={<BarChartIcon color="secondary" />} />
+        <BottomNavigationAction icon={<CameraIcon color="secondary" />} />
+      </BottomNavigation>
+    </Box>
   );
 }
