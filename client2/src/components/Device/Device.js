@@ -7,6 +7,7 @@ import {updateDeviceConfig, getDeviceState, changeAlias} from '../../actions';
 // React components.
 import StateContainer from './StateContainer';
 import AliasContainer from './AliasContainer';
+import SliderContainer from './SliderContainer';
 
 import Swal from 'sweetalert2';
 
@@ -14,7 +15,7 @@ import Swal from 'sweetalert2';
 import {withStyles, createStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import Fade from '@material-ui/core/Fade';
+// import Fade from '@material-ui/core/Fade';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 // Component style.
@@ -121,13 +122,11 @@ class Device extends Component {
 
     return (
       <Container component="main" maxWidth="xs">
-        <Fade in={trans}>
-          <LinearProgress />
-        </Fade>
-
         <AliasContainer />
 
         <StateContainer />
+
+        <SliderContainer />
       </Container>
     );
   }

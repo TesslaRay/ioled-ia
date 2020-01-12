@@ -9,7 +9,15 @@ import CameraIcon from '@material-ui/icons/Camera';
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: '#222128;',
+    backgroundColor: '#222128',
+    position: 'absolute', //Here is the trick
+    bottom: 0, //Here is the trick
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute', //Here is the trick
+    bottom: 0, //Here is the trick
   },
 });
 
@@ -26,8 +34,8 @@ export default function SimpleBottomNavigation() {
       showLabels
       className={classes.root}
     >
-      <BottomNavigationAction icon={<HomeIcon color="secondary" />} />
-      <BottomNavigationAction icon={<BarChartIcon color="Primary" />} />
+      <BottomNavigationAction icon={<BarChartIcon color="secondary" />} />
+      <BottomNavigationAction icon={<HomeIcon color="primary" />} />
       <BottomNavigationAction icon={<CameraIcon color="secondary" />} />
     </BottomNavigation>
   );

@@ -8,15 +8,7 @@ import {withStyles, createStyles} from '@material-ui/core/styles';
 import {Box} from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
 
-import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-
-// Create a new theme using Nunito Sans
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: 'Nunito Sans, Roboto, sans-serif',
-  },
-});
 
 // Component style.
 const styles = (theme) =>
@@ -63,27 +55,25 @@ class AliasContainer extends Component {
     const {classes} = this.props;
 
     return (
-      <ThemeProvider theme={theme}>
-        <Box className={classes.aliasContainer} borderRadius={12} width="100%">
-          <div className={classes.firstline}>
-            <Box className={classes.alias} borderRadius={5} width="90%">
-              <Box width="80%" className={classes.name}>
-                <Typography>OFICINA IOLED</Typography>
-              </Box>
-              <Box width="20%">
-                <DeviceMenu />
-              </Box>
+      <Box className={classes.aliasContainer} borderRadius={12} width="100%">
+        <div className={classes.firstline}>
+          <Box className={classes.alias} borderRadius={5} width="90%">
+            <Box width="80%" className={classes.name}>
+              <Typography>OFICINA IOLED</Typography>
             </Box>
-
-            <div className={classes.onSwitch}>
-              <Switch value="checkedA" />
-            </div>
-          </div>
-          <Box className={classes.weekContainer} borderRadius={36} width="100%">
-            <Typography>Semana - 1</Typography>
+            <Box width="20%">
+              <DeviceMenu />
+            </Box>
           </Box>
+
+          <div className={classes.onSwitch}>
+            <Switch value="checkedA" color="primary" />
+          </div>
+        </div>
+        <Box className={classes.weekContainer} borderRadius={36} width="100%">
+          <Typography>Semana - 1</Typography>
         </Box>
-      </ThemeProvider>
+      </Box>
     );
   }
 }
