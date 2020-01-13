@@ -32,10 +32,6 @@ const styles = () =>
   });
 
 class Navbar extends Component {
-  // String capitalization.
-  capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
   // Render the navbar depending the auth state.
   authContentRender() {
     const {classes, user} = this.props;

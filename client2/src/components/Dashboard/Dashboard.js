@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+
 // material-ui components.
 import {withStyles} from '@material-ui/core/styles';
+
 // React components.
 import DeviceList from './DeviceList';
 import SimpleBottomNavigation from './SimpleBottom';
@@ -15,6 +16,11 @@ const styles = (theme) => ({
 });
 
 class DashBoard extends Component {
+  // devicesTest() {
+  //   const {devices} = this.props;
+  //   console.log(devices);
+  // }
+
   render() {
     // Get the styles classes from props.
     const {classes} = this.props;
@@ -28,8 +34,8 @@ class DashBoard extends Component {
   }
 }
 
-const mapStateToProps = ({devices}) => {
-  return {devices};
-};
+// const mapStateToProps = ({devices}) => {
+//   return {devices};
+// };
 
-export default connect(mapStateToProps)(withStyles(styles)(DashBoard));
+export default withStyles(styles)(DashBoard);

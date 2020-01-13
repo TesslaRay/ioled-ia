@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+
+// Action creators.
+import {getDeviceState} from '../../actions';
 
 // material-ui components.
 import {withStyles, createStyles} from '@material-ui/core/styles';
@@ -20,7 +24,6 @@ const styles = (theme) =>
       backgroundColor: '#1A191E',
       marginTop: '8px',
       display: 'flex',
-      // padding: theme.spacing(1),
     },
     powerContainer: {
       backgroundColor: '#323039',
@@ -59,8 +62,14 @@ const defaultProps = {
 };
 
 class StateContainer extends Component {
+  componentDidMount() {
+    const {deviceId, index} = this.props;
+    this.props.getDeviceState({deviceId}, index);
+  }
+
   render() {
-    const {temp = 0, hum = 0, classes} = this.props;
+    const {classes} = this.props;
+    const {temp = 0, hum = 0, duty} = this.props;
 
     return (
       <Box width="100%" className={classes.stateContainer}>
@@ -68,19 +77,18 @@ class StateContainer extends Component {
           <SvgIcon component={ThunderIcon} viewBox="0 0 11 23" className={classes.stateIcon} />
           <div className={classes.state}>
             <Typography className={classes.stateNumber} variant="h6">
-              300
+              {duty * 200}
             </Typography>
             <Typography className={classes.stateUnity}> W</Typography>
           </div>
           <Typography className={classes.stateText}>Consumo</Typography>
         </Box>
-
         <Box width="33%" className={classes.tempContainer} borderRadius={12} border={1} {...defaultProps}>
           <SvgIcon component={TempIcon} viewBox="0 0 14 33" className={classes.stateIcon} />
 
           <div className={classes.state}>
             <Typography className={classes.stateNumber} fontWeight="fontWeightBold">
-              21
+              {temp.toFixed(1)}
             </Typography>
             <Typography className={classes.stateUnity}> ºC</Typography>
           </div>
@@ -91,7 +99,7 @@ class StateContainer extends Component {
           <SvgIcon component={HumIcon} viewBox="0 0 41 28" className={classes.stateIcon} />
 
           <div className={classes.state}>
-            <Typography className={classes.stateNumber}>42</Typography>
+            <Typography className={classes.stateNumber}> {hum.toFixed(1)}</Typography>
             <Typography className={classes.stateUnity}> %</Typography>
           </div>
           <Typography className={classes.stateText}>Humedad</Typography>
@@ -101,4 +109,8 @@ class StateContainer extends Component {
   }
 }
 
-export default withStyles(styles)(StateContainer);
+const mapStateToProps = (state, ownProps) => {
+  return state.devices[ownProps.index];
+};
+
+export default connect(mapStateToProps, {getDeviceState})(withStyles(styles)(StateContainer));

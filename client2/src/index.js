@@ -25,6 +25,7 @@ const theme = createMuiTheme({
       main: '#fff',
     },
   },
+  fontFamily: 'Montserrat',
 });
 
 ReactDOM.render(

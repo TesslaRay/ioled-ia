@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+
 // Action creators.
 import {fetchDevices} from '../../actions';
+
 // material-ui components.
 import {withStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+
 // React componenets.
 import Device from '../Device/Device';
 

@@ -1,8 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
+
 // Action Creators.
 import {fetchUser} from '../actions';
+
 // Components.
 import Navbar from './Dashboard/Navbar';
 import Dashboard from './Dashboard/Dashboard';
