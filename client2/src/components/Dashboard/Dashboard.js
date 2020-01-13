@@ -16,11 +16,6 @@ const styles = (theme) => ({
 });
 
 class DashBoard extends Component {
-  // devicesTest() {
-  //   const {devices} = this.props;
-  //   console.log(devices);
-  // }
-
   render() {
     // Get the styles classes from props.
     const {classes} = this.props;
@@ -33,9 +28,5 @@ class DashBoard extends Component {
     );
   }
 }
-
-// const mapStateToProps = ({devices}) => {
-//   return {devices};
-// };
 
 export default withStyles(styles)(DashBoard);

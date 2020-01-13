@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ioledLogo from '../../images/logo.png';
 
@@ -8,7 +8,6 @@ import {withStyles, createStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Material-ui component styles.
 const styles = () =>
@@ -27,33 +26,14 @@ const styles = () =>
       margin: '0 10px',
     },
     circular: {
-      color: 'green',
+      color: '#00EAA6',
     },
   });
 
 class Navbar extends Component {
-  // Render the navbar depending the auth state.
-  authContentRender() {
-    const {classes, user} = this.props;
-    switch (user) {
-      case null:
-        return (
-          <Fragment>
-            <CircularProgress className={classes.circular} />
-          </Fragment>
-        );
-      default:
-        return (
-          <Fragment>
-            <Avatar className={classes.avatar} alt={user.name} src={user.photo} />
-          </Fragment>
-        );
-    }
-  }
-
   // Render the component.
   render() {
-    const {classes} = this.props;
+    const {classes, user} = this.props;
     return (
       <div className={classes.root}>
         <AppBar className={classes.appbar} position="static">
@@ -62,7 +42,7 @@ class Navbar extends Component {
               <img className={classes.logo} src={ioledLogo} alt="ioled" />
             </a>
 
-            {this.authContentRender()}
+            <Avatar className={classes.avatar} alt={user.name} src={user.photo} />
           </Toolbar>
         </AppBar>
       </div>

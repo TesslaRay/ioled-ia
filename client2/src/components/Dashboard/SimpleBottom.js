@@ -10,8 +10,6 @@ import CameraIcon from '@material-ui/icons/Camera';
 const useStyles = makeStyles({
   root: {
     backgroundColor: '#222128',
-    position: 'absolute', //Here is the trick
-    bottom: 0, //Here is the trick
     width: '100%',
     height: 50,
     justifyContent: 'center',

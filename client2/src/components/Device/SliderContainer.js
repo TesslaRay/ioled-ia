@@ -17,6 +17,9 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Fade from '@material-ui/core/Fade';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
+
 // Component style.
 const styles = (theme) =>
   createStyles({
@@ -34,6 +37,10 @@ const styles = (theme) =>
     },
     progress: {
       backgroundColor: '#29ABE2',
+    },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
     },
   });
 
@@ -152,9 +159,13 @@ class SliderContainer extends Component {
           />
         </Snackbar>
 
-        <Fade in={trans} className={classes.progress}>
+        <Backdrop className={classes.backdrop} open={trans}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+
+        {/* <Fade in={trans} className={classes.progress}>
           <LinearProgress />
-        </Fade>
+        </Fade> */}
       </Box>
     );
   }
