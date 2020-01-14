@@ -23,7 +23,9 @@ class App extends Component {
 
   // Render the navbar depending the auth state.
   authContentRender() {
+    // const {user} = this.props;
     const {user} = this.props;
+
     switch (user) {
       case null:
         return (

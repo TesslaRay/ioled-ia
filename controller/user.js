@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const _ = require("lodash");
 
 /**
  * Returns the current authenticated user.
@@ -6,13 +6,12 @@ const _ = require('lodash');
  * @param {object} res Respose.
  */
 exports.currentUser = (req, res) => {
-	// If user is not authenticated, return null.
-	if (!req.user) res.send();
-	
-	else {
-		const user = _.pick(req.user, ['name', 'email', 'photo']);
-		res.status(200).send(user);
-	}
+  // If user is not authenticated, return null.
+  if (!req.user) res.send();
+  else {
+    const user = _.pick(req.user, ["name", "lastName", "email", "photo"]);
+    res.status(200).send(user);
+  }
 };
 
 /**
@@ -22,6 +21,6 @@ exports.currentUser = (req, res) => {
  * @see http://www.passportjs.org/docs/logout/
  */
 exports.logoutUser = (req, res) => {
-	req.logout();
-	res.redirect('/');
+  req.logout();
+  res.redirect("/");
 };

@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import StateContainer from './StateContainer';
 import AliasContainer from './AliasContainer';
 import SliderContainer from './SliderContainer';
-import NameContainer from './NameContainer';
+// import NameContainer from './NameContainer';
 
 // material-ui components.
 import {withStyles, createStyles} from '@material-ui/core/styles';
@@ -35,7 +35,7 @@ class Device extends Component {
   render() {
     return (
       <Container component="main" maxWidth="sm">
-        <NameContainer />
+        {/* <NameContainer /> */}
 
         <AliasContainer index={this.props.index} />
 

@@ -14,9 +14,6 @@ import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
-import Fade from '@material-ui/core/Fade';
-import LinearProgress from '@material-ui/core/LinearProgress';
-
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
 
@@ -162,10 +159,6 @@ class SliderContainer extends Component {
         <Backdrop className={classes.backdrop} open={trans}>
           <CircularProgress color="inherit" />
         </Backdrop>
-
-        {/* <Fade in={trans} className={classes.progress}>
-          <LinearProgress />
-        </Fade> */}
       </Box>
     );
   }

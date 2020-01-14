@@ -3,9 +3,12 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import HomeIcon from '@material-ui/icons/Home';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import CameraIcon from '@material-ui/icons/Camera';
+
+import SvgIcon from '@material-ui/core/SvgIcon';
+
+import {ReactComponent as HomeIcon} from '../../images/HomeSVG.svg';
 
 const useStyles = makeStyles({
   root: {
@@ -33,7 +36,7 @@ export default function SimpleBottomNavigation() {
       className={classes.root}
     >
       <BottomNavigationAction icon={<BarChartIcon color="secondary" />} />
-      <BottomNavigationAction icon={<HomeIcon color="primary" />} />
+      <BottomNavigationAction icon={<SvgIcon component={HomeIcon} viewBox="0 0 39 38" />} />
       <BottomNavigationAction icon={<CameraIcon color="secondary" />} />
     </BottomNavigation>
   );
