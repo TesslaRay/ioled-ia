@@ -46,12 +46,12 @@ module.exports = app => {
   // Express configuration to serve production files.
   if (process.env.NODE_ENV === "production") {
     console.log("Initializing app in production environment ...");
-    app.use(static("client2/build"));
+    app.use(static("client/build"));
 
     const path = require("path");
     app.get("*", (req, res) => {
       const rootPath = path.join(__dirname, "../");
-      res.sendFile(path.resolve(rootPath, "client2", "build", "index.html"));
+      res.sendFile(path.resolve(rootPath, "client", "build", "index.html"));
     });
   }
 };

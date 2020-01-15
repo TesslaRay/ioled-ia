@@ -27,6 +27,6 @@ server s:
 
 dev d:
 	@echo "[running] Running nodejs and React 2..."
-	@npm run dev2
+	@npm run dev
 
 .PHONY: version v prepare pre clean c run r stop s

@@ -1,6 +1,6 @@
 {
   "name": "ioled-dev",
-  "version": "2.0.0",
+  "version": "1.0.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,9 +8,7 @@
     "start": "node index.js",
     "server": "nodemon --no-deprecation index.js",
     "client": "npm run start --prefix client",
-    "client2": "npm run start --prefix client2",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "dev2": "concurrently \"npm run server\" \"npm run client2\""
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Cristian Valdivia",
   "license": "ISC",
