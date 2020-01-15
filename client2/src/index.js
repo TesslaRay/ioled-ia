@@ -25,7 +25,10 @@ const theme = createMuiTheme({
       main: '#fff',
     },
   },
-  fontFamily: 'Montserrat',
+  typography: {
+    fontFamily: 'Montserrat, sans-serif',
+    fontSize: 12,
+  },
 });
 
 ReactDOM.render(

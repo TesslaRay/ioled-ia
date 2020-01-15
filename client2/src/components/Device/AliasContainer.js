@@ -17,13 +17,20 @@ import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
+
+import SvgIcon from '@material-ui/core/SvgIcon';
+
+import {ReactComponent as TriangleIcon} from '../../images/TriangleIndicator.svg';
+
 // Component style.
 const styles = (theme) =>
   createStyles({
     aliasContainer: {
       padding: theme.spacing(1),
       backgroundColor: '#323039',
-      marginTop: '60px',
+      marginTop: '10px',
     },
     firstline: {
       display: 'flex',
@@ -51,9 +58,17 @@ const styles = (theme) =>
     weekContainer: {
       textAlign: 'center',
       backgroundColor: '#1A191E',
-      fontSize: '12px',
       color: 'white',
       marginTop: '5px',
+      display: 'flex',
+      fontSize: '12px',
+    },
+    triangleIcon: {
+      marginTop: '0px',
+    },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#00EAA6',
     },
   });
 
@@ -63,6 +78,7 @@ class AliasContainer extends Component {
     state: this.props.state,
     snackOpen: false,
     snackMessage: '',
+    trans: false,
   };
 
   // Map device state to configuration readable by the backend.
@@ -86,14 +102,14 @@ class AliasContainer extends Component {
     const {classes} = this.props;
     const {state} = this.props;
 
-    const {snackOpen, snackMessage} = this.state;
+    const {snackOpen, snackMessage, trans} = this.state;
 
     return (
       <Box className={classes.aliasContainer} borderRadius={12} width="100%">
         <div className={classes.firstline}>
           <Box className={classes.alias} borderRadius={5} width="90%">
             <Box width="80%" className={classes.name}>
-              <Typography>{this.props.alias}</Typography>
+              <Typography>{this.props.alias.toUpperCase()}</Typography>
             </Box>
             <Box width="20%">
               <DeviceMenu />
@@ -105,7 +121,12 @@ class AliasContainer extends Component {
           </div>
         </div>
         <Box className={classes.weekContainer} borderRadius={36} width="100%">
-          <Typography>Semana - 1</Typography>
+          <Box width="80%">
+            <Typography>Semana - 1</Typography>
+          </Box>
+          <Box width="20%">
+            <SvgIcon component={TriangleIcon} viewBox="0 0 17 17" className={classes.triangleIcon} fontSize="small" />
+          </Box>
         </Box>
 
         <Snackbar
@@ -124,6 +145,10 @@ class AliasContainer extends Component {
             message={snackMessage}
           />
         </Snackbar>
+
+        <Backdrop className={classes.backdrop} open={trans}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Box>
     );
   }

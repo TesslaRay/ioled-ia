@@ -2,15 +2,28 @@ import React, {Component, Fragment} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 
+import {withStyles, createStyles} from '@material-ui/core/styles';
+
 // Action Creators.
 import {fetchUser} from '../actions';
 
 // Components.
-import Navbar from './Dashboard/Navbar';
 import Dashboard from './Dashboard/Dashboard';
 import SignIn from './Dashboard/SignIn';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
+
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
+
+// Component style.
+const styles = (theme) =>
+  createStyles({
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#00EAA6',
+    },
+  });
 
 class App extends Component {
   /* This call fetch user on component first mount.
@@ -24,13 +37,15 @@ class App extends Component {
   // Render the navbar depending the auth state.
   authContentRender() {
     // const {user} = this.props;
-    const {user} = this.props;
+    const {user, classes} = this.props;
 
     switch (user) {
       case null:
         return (
           <Fragment>
-            <SignIn />
+            <Backdrop className={classes.backdrop} open={true}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
           </Fragment>
         );
       case false:
@@ -42,7 +57,7 @@ class App extends Component {
       default:
         return (
           <Fragment>
-            <Navbar />
+            {/* <Navbar /> */}
             <Dashboard />
           </Fragment>
         );
@@ -67,4 +82,6 @@ const mapStateToProps = ({user}) => {
 };
 
 // Connect this component to redux and the action creators.
-export default connect(mapStateToProps, {fetchUser})(App);
+// export default connect(mapStateToProps, {fetchUser})(App);
+
+export default connect(mapStateToProps, {fetchUser})(withStyles(styles)(App));

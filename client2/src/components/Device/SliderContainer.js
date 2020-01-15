@@ -24,7 +24,12 @@ const styles = (theme) =>
       textAlign: 'center',
       backgroundColor: '#323039',
       padding: theme.spacing(1),
-      marginTop: '30px',
+      marginTop: '0px',
+    },
+    nameContainer: {
+      fontSize: '12px',
+      color: '#FFFFFF',
+      marginTop: '40px',
     },
     rangeLabel: {
       display: 'flex',
@@ -32,18 +37,14 @@ const styles = (theme) =>
       color: 'white',
       fontSize: '12px',
     },
-    progress: {
-      backgroundColor: '#29ABE2',
-    },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
-      color: '#fff',
+      color: '#00EAA6',
     },
   });
 
 const IoledSlider = withStyles({
   root: {
-    color: 'linear-gradient(180deg, #29ABE2 0%, #00EAA6 100%)',
     height: 10,
   },
   thumb: {
@@ -122,43 +123,47 @@ class SliderContainer extends Component {
     const {snackOpen, snackMessage, tempDuty, trans} = this.state;
 
     return (
-      <Box width="100%" className={classes.sliderContainer} borderRadius={12}>
-        <div className={classes.rangeLabel}>
-          <Typography>0%</Typography>
-          <Typography>100%</Typography>
-        </div>
-        <div className={classes.dutyContainer}>
-          <IoledSlider
-            value={tempDuty}
-            min={0}
-            max={1}
-            step={0.05}
-            valueLabelDisplay="auto"
-            onChange={this.sliderOnChangeHandler}
-            onChangeCommitted={this.sliderOnReleaseHandler}
-          />
-        </div>
+      <Box width="100%">
+        <Typography className={classes.nameContainer}>Control de intensidad</Typography>
 
-        <Snackbar
-          anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-          onClose={() => {
-            this.setState({snackOpen: false});
-          }}
-          open={snackOpen}
-          autoHideDuration={2000}
-        >
-          <SnackbarContent
-            style={{
-              backgroundColor: '#00EAA6',
-              color: 'white',
+        <Box width="100%" className={classes.sliderContainer} borderRadius={12}>
+          <div className={classes.rangeLabel}>
+            <Typography>0%</Typography>
+            <Typography>100%</Typography>
+          </div>
+          <div className={classes.dutyContainer}>
+            <IoledSlider
+              value={tempDuty}
+              min={0}
+              max={1}
+              step={0.05}
+              valueLabelDisplay="auto"
+              onChange={this.sliderOnChangeHandler}
+              onChangeCommitted={this.sliderOnReleaseHandler}
+            />
+          </div>
+
+          <Snackbar
+            anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+            onClose={() => {
+              this.setState({snackOpen: false});
             }}
-            message={snackMessage}
-          />
-        </Snackbar>
+            open={snackOpen}
+            autoHideDuration={2000}
+          >
+            <SnackbarContent
+              style={{
+                backgroundColor: '#00EAA6',
+                color: 'white',
+              }}
+              message={snackMessage}
+            />
+          </Snackbar>
 
-        <Backdrop className={classes.backdrop} open={trans}>
-          <CircularProgress color="inherit" />
-        </Backdrop>
+          <Backdrop className={classes.backdrop} open={trans}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        </Box>
       </Box>
     );
   }

@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 
 // React components.
+import Navbar from './Navbar';
 import DeviceList from './DeviceList';
 import SimpleBottomNavigation from './SimpleBottom';
 
@@ -22,6 +23,7 @@ class DashBoard extends Component {
 
     return (
       <div className={classes.root}>
+        <Navbar />
         <DeviceList />
         <SimpleBottomNavigation />
       </div>

@@ -22,8 +22,13 @@ const styles = (theme) =>
     stateContainer: {
       textAlign: 'center',
       backgroundColor: '#1A191E',
-      marginTop: '8px',
+      marginTop: '0px',
       display: 'flex',
+    },
+    nameContainer: {
+      fontSize: '12px',
+      color: '#FFFFFF',
+      marginTop: '40px',
     },
     powerContainer: {
       backgroundColor: '#323039',
@@ -55,6 +60,9 @@ const styles = (theme) =>
       color: 'white',
       fontSize: '11px',
     },
+    boxState: {
+      marginBottom: '4px',
+    },
   });
 
 const defaultProps = {
@@ -69,40 +77,46 @@ class StateContainer extends Component {
 
   render() {
     const {classes} = this.props;
-    const {temp = 0, hum = 0, duty} = this.props;
+    const {temp = 0, hum = 0, state, duty} = this.props;
 
     return (
-      <Box width="100%" className={classes.stateContainer}>
-        <Box width="33%" className={classes.powerContainer} borderRadius={12} border={1} {...defaultProps}>
-          <SvgIcon component={ThunderIcon} viewBox="0 0 11 23" className={classes.stateIcon} />
-          <div className={classes.state}>
-            <Typography className={classes.stateNumber} variant="h6">
-              {duty * 200}
-            </Typography>
-            <Typography className={classes.stateUnity}> W</Typography>
-          </div>
-          <Typography className={classes.stateText}>Consumo</Typography>
-        </Box>
-        <Box width="33%" className={classes.tempContainer} borderRadius={12} border={1} {...defaultProps}>
-          <SvgIcon component={TempIcon} viewBox="0 0 14 33" className={classes.stateIcon} />
+      <Box>
+        <Typography className={classes.nameContainer}>Estados</Typography>
+        <Box width="100%" className={classes.stateContainer}>
+          <Box width="33%" className={classes.powerContainer} borderRadius={12} border={0} {...defaultProps}>
+            <SvgIcon component={ThunderIcon} viewBox="0 0 11 23" className={classes.stateIcon} />
+            <div className={classes.state}>
+              <Typography className={classes.stateNumber} variant="h6">
+                {(duty * 200).toFixed() * state}
+              </Typography>
+              <Typography className={classes.stateUnity}> W</Typography>
+            </div>
+            <Box className={classes.boxState} borderRadius={12} width="100%">
+              <Typography className={classes.stateText}>Al {(duty * 100).toFixed()} %</Typography>
+            </Box>
+          </Box>
 
-          <div className={classes.state}>
-            <Typography className={classes.stateNumber} fontWeight="fontWeightBold">
-              {temp.toFixed(1)}
-            </Typography>
-            <Typography className={classes.stateUnity}> ºC</Typography>
-          </div>
-          <Typography className={classes.stateText}>Temperatura</Typography>
-        </Box>
+          <Box width="33%" className={classes.tempContainer} borderRadius={12} border={0} {...defaultProps}>
+            <SvgIcon component={TempIcon} viewBox="0 0 14 33" className={classes.stateIcon} />
 
-        <Box width="33%" className={classes.humContainer} borderRadius={12} border={1} {...defaultProps}>
-          <SvgIcon component={HumIcon} viewBox="0 0 41 28" className={classes.stateIcon} />
+            <div className={classes.state}>
+              <Typography className={classes.stateNumber} fontWeight="fontWeightBold">
+                {temp.toFixed(1)}
+              </Typography>
+              <Typography className={classes.stateUnity}> ºC</Typography>
+            </div>
+            <Typography className={classes.stateText}>Temperatura</Typography>
+          </Box>
 
-          <div className={classes.state}>
-            <Typography className={classes.stateNumber}> {hum.toFixed(1)}</Typography>
-            <Typography className={classes.stateUnity}> %</Typography>
-          </div>
-          <Typography className={classes.stateText}>Humedad</Typography>
+          <Box width="33%" className={classes.humContainer} borderRadius={12} border={0} {...defaultProps}>
+            <SvgIcon component={HumIcon} viewBox="0 0 41 28" className={classes.stateIcon} />
+
+            <div className={classes.state}>
+              <Typography className={classes.stateNumber}> {hum.toFixed(1)}</Typography>
+              <Typography className={classes.stateUnity}> %</Typography>
+            </div>
+            <Typography className={classes.stateText}>Humedad</Typography>
+          </Box>
         </Box>
       </Box>
     );

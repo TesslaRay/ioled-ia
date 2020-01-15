@@ -76,7 +76,7 @@ const StyledDivider = styled(Divider)`
 class Navbar extends Component {
   // Component state.
   state = {
-    rigth: true,
+    rigth: false,
   };
 
   capitalize = (str) => {
@@ -98,7 +98,12 @@ class Navbar extends Component {
     const {classes, user} = this.props;
 
     return (
-      <div className={classes.drawer} role="presentation" onClick={this.toggleDrawer(false)}>
+      <div
+        className={classes.drawer}
+        role="presentation"
+        onClick={this.toggleDrawer(false)}
+        onKeyDown={this.toggleDrawer(false)}
+      >
         <Box className={classes.drawerup}>
           <Box width="20%">
             <Avatar className={classes.avatar} alt={user.name} src={user.photo} onClick={this.toggleDrawer(true)} />
@@ -145,7 +150,7 @@ class Navbar extends Component {
           </Toolbar>
         </AppBar>
 
-        <Drawer anchor="right" open={rigth}>
+        <Drawer anchor="right" open={rigth} onClose={this.toggleDrawer(false)}>
           {this.sideList()}
         </Drawer>
       </div>
