@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import StateContainer from './StateContainer';
 import AliasContainer from './AliasContainer';
 import SliderContainer from './SliderContainer';
+import TimerContainer from './TimerContainer';
 // import NameContainer from './NameContainer';
 
 // material-ui components.
@@ -42,6 +43,8 @@ class Device extends Component {
         <StateContainer index={this.props.index} />
 
         <SliderContainer index={this.props.index} />
+
+        <TimerContainer index={this.props.index} />
       </Container>
     );
   }

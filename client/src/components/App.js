@@ -57,7 +57,6 @@ class App extends Component {
       default:
         return (
           <Fragment>
-            {/* <Navbar /> */}
             <Dashboard />
           </Fragment>
         );

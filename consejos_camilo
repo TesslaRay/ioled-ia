@@ -1,0 +1,30 @@
+
+TAREAS IOLED
+============
+1.- definir alcances del producto  <==========
+  a.- debe ser definida en alto nivel con todo el equipo.
+  b.- se podrían usar renders del diseño para tener una referencia del producto final.
+  c.- definir casos de usos, ejemplos: 
+    * se debería poder vender y envíar a cualquier país del mundo.
+    * se debe poder instalar un equipo sin ayuda del técnico. (bluetooth/wifi modo ap)
+2.- definir todas las tareas a realizar por área en función del alcance del producto. (ver ejemplos tareas desarrollo)
+3.- definir metas de la empresa.
+  - nro de ventas que se quieren alcanzar para el año?
+  - nro de clientes que se quieren tener para el año? (ventas > clientes)
+  - $$ de meta en ventas de la empresa.
+    - en función de las metas de la empresa, el vendedor fija sus metas personales. (meta de vtas vendedor > meta de vtas empresa) 
+
+
+EJEMPLO TAREAS DESAROLLO
+================
+- [ ] team: buscar otro desarollador.
+- [ ] app: sacar carpeta client a un nuevo proyecto y subir a cloud storage hosting
+- [ ] api-gateway: implementar api gateway en expres con rutas: signup, payment, dashboard, history, panel-admin.
+- [ ] app: investigar PWA (celular aplicación escritorio)
+- [ ] arch: configurar DNS para enmascarar url del dashboard.
+- [ ] arch: diagramar solución de arquitectura definitiva.
+- [ ] app: implementar correctamente los states de redux, ya que no tienen initialState.
+- [ ] app: usar react-persist para almacenar todo el estado de redux, sin tener que intaractuar con cookies y localstorage.
+- [ ] api: validar existencia de las variables de entorno en fichero keys
+- [ ] projects: instalar prettier en todos los proyectos
+- [ ] development-team: definición de LISTO (ejemplo de scrum http://scrum.menzinsky.com/2015/03/que-significan-dor-y-dod-dor-defintion.html)

@@ -1,4 +1,4 @@
-const passport = require('passport');
+const passport = require("passport");
 
 /**
  * Send the user to google oauth flow to log in with a google account.
@@ -8,17 +8,20 @@ const passport = require('passport');
  * @param  {Function} next Callback function
  */
 exports.authRequest = (req, res, next) => {
-	passport.authenticate('google', {
-		scope: ['profile', 'email'],
-	})(req, res, next);
+  console.log("here in auth");
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })(req, res, next);
 };
 
 // Redirect to the server with the session established.
 exports.authCallback = (req, res, next) => {
-	passport.authenticate('google')(req, res, next);
+  console.log("here in auth callback");
+  console.log(req.params, req.body, req.headers, req.query);
+  passport.authenticate("google")(req, res, next);
 };
 
 // Auth callback redirect.
 exports.authRedirect = (req, res) => {
-	res.redirect('/dashboard');
+  res.redirect("/dashboard");
 };

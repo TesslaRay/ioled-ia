@@ -72,6 +72,43 @@ const styles = (theme) =>
     },
   });
 
+const IoledSwitch = withStyles((theme) => ({
+  root: {
+    width: 42,
+    height: 26,
+    padding: 0,
+    margin: theme.spacing(1),
+  },
+  switchBase: {
+    padding: 1,
+    '&$checked': {
+      transform: 'translateX(16px)',
+      color: theme.palette.common.white,
+      '& + $track': {
+        backgroundImage: 'linear-gradient(180deg, #29ABE2 0%, #00EAA6 100%)',
+        opacity: 1,
+        border: 'none',
+      },
+    },
+    '&$focusVisible $thumb': {
+      backgroundImage: 'linear-gradient(180deg, #29ABE2 0%, #00EAA6 100%)',
+      border: '6px solid #fff',
+    },
+  },
+  thumb: {
+    width: 24,
+    height: 24,
+  },
+  track: {
+    borderRadius: 26 / 2,
+    border: `1px solid ${theme.palette.grey[400]}`,
+    backgroundColor: theme.palette.grey[50],
+    opacity: 1,
+    transition: theme.transitions.create(['background-color', 'border']),
+  },
+  checked: {},
+}))(Switch);
+
 class AliasContainer extends Component {
   // Component state.
   state = {
@@ -117,7 +154,7 @@ class AliasContainer extends Component {
           </Box>
 
           <div className={classes.onSwitch}>
-            <Switch checked={state} onChange={this.switchOn} value="state" color="primary" />
+            <IoledSwitch checked={state} onChange={this.switchOn} value="state" color="primary" />
           </div>
         </div>
         <Box className={classes.weekContainer} borderRadius={36} width="100%">

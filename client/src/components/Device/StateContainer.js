@@ -28,7 +28,7 @@ const styles = (theme) =>
     nameContainer: {
       fontSize: '12px',
       color: '#FFFFFF',
-      marginTop: '40px',
+      marginTop: '30px',
     },
     powerContainer: {
       backgroundColor: '#323039',

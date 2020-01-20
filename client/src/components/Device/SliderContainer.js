@@ -29,7 +29,7 @@ const styles = (theme) =>
     nameContainer: {
       fontSize: '12px',
       color: '#FFFFFF',
-      marginTop: '40px',
+      marginTop: '30px',
     },
     rangeLabel: {
       display: 'flex',
@@ -62,11 +62,13 @@ const IoledSlider = withStyles({
   valueLabel: {
     left: 'calc(-50% + 4px)',
   },
-  track: {
+  rail: {
+    backgroundImage: 'linear-gradient(90deg, #29ABE2 0%, #00EAA6 100%)',
     height: 8,
     borderRadius: 4,
   },
-  rail: {
+  track: {
+    backgroundImage: 'linear-gradient(90deg, #29ABE2 0%, #00EAA6 100%)',
     height: 8,
     borderRadius: 4,
   },

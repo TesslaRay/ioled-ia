@@ -12,7 +12,7 @@ import SimpleBottomNavigation from './SimpleBottom';
 const styles = (theme) => ({
   root: {
     backgroundColor: '#1A191E',
-    height: '90vh',
+    height: '100vh',
   },
 });
 

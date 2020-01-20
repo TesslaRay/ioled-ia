@@ -1,6 +1,6 @@
-const Device = require('../models/Device');
-const User = require('../models/User');
-const {sendGoogleDeviceConfig, getGoogleDeviceState} = require('./google');
+const Device = require("../models/Device");
+const User = require("../models/User");
+const { sendGoogleDeviceConfig, getGoogleDeviceState } = require("./google");
 
 /**
  * List all the registered devices for the current user.
@@ -9,8 +9,15 @@ const {sendGoogleDeviceConfig, getGoogleDeviceState} = require('./google');
  * @param {object} res Response.
  */
 exports.listDevices = async (req, res) => {
-	const devices = await Device.find({_user: req.user.id}, 'deviceId duty state alias timerOn timerOff timerState');
-	res.send({devices});
+  console.log("[iOLED-API][getDeviceState][Request]", req.params, req.body);
+
+  const devices = await Device.find(
+    { _user: req.user.id },
+    "deviceId duty state alias timerOn timerOff timerState"
+  );
+  console.log("[iOLED-API][getDeviceState][Response] ", devices);
+
+  res.send({ devices });
 };
 
 /**
@@ -20,73 +27,74 @@ exports.listDevices = async (req, res) => {
  * @param {object} res Response.
  */
 exports.newDevice = async (req, res) => {
-	console.log(req.body);
-	console.log(req.user)
-	const {deviceId} = req.body;
-	const currentUser = await User.findById(req.user.id);
+  const { deviceId } = req.body;
+  const currentUser = await User.findById(req.user.id);
 
-	try {
-		const device = await new Device({
-			deviceId,
-			_user: req.user.id,
-		}).save();
-		currentUser.devices.push(device);
-		res.status(201).send({message: 'Dispositivo registrado'});
-	} catch (err) {
-		console.log(err);
-		if (err.name === 'ValidationError') {
-			return res.status(400).send({error: err.message});
-		}
-		if (err.name === 'MongoError') {
-			return res.status(409).send({error: err.errmsg});
-		}
-	}
+  try {
+    const device = await new Device({
+      deviceId,
+      _user: req.user.id
+    }).save();
+    currentUser.devices.push(device);
+    res.status(201).send({ message: "Dispositivo registrado" });
+  } catch (err) {
+    console.log(err);
+    if (err.name === "ValidationError") {
+      return res.status(400).send({ error: err.message });
+    }
+    if (err.name === "MongoError") {
+      return res.status(409).send({ error: err.errmsg });
+    }
+  }
 };
 
 /**
  * Update the configuration of a registered device for the current user.
  * @description Send the configuration to Google IoT Core.
- * @param {{params: {id: string}, 
+ * @param {{params: {id: string},
  * body: {device: {deviceId: string, config: {duty: number, state: boolean, timerOn: string, timeOff: string, timerState: boolean, }}},
  * user: {id: string}}} req Request.
  * @param res Response.
  */
 exports.updateDeviceConfig = async (req, res) => {
-	// Get the deviceid and config from the request body.
-	let config;
-	const deviceId = req.params.id;
-	console.log(req.body);
-	try {
-		({config} = req.body.device);
-	} catch (err) {
-		return res.status(400).send({status: 400});
-	}
-	console.log('Sending config ...');
-	// Send the configuration to google IoT core.
-	const status = await sendGoogleDeviceConfig(deviceId, config);
-	console.log('Response:', status);
-	// If configuration is ok, then update the config in the database.
-	if (status === 200) {
-		try {
-			await Device.findOneAndUpdate({_user: req.user.id, deviceId: deviceId}, {
-					duty: config.duty, 
-					state: config.state,
-					timerOn: config.timerOn,
-					timerOff: config.timerOff,
-					timerState: config.timerState
-				});
-			return res.status(status).send({status});
-		} catch (err) {
-			console.log('MongoError', err);
-		}
-	}
-	if (status === 404) {
-		return res.status(404).send({status});
-	}
-	if (status === 429) {
-		// Send error 429: too many request.
-		return res.status(429).send({status});
-	}
+  // Get the deviceid and config from the request body.
+  let config;
+  const deviceId = req.params.id;
+  console.log(req.body);
+  try {
+    ({ config } = req.body.device);
+  } catch (err) {
+    return res.status(400).send({ status: 400 });
+  }
+  console.log("Sending config ...");
+  // Send the configuration to google IoT core.
+  const status = await sendGoogleDeviceConfig(deviceId, config);
+  console.log("Response:", status);
+  // If configuration is ok, then update the config in the database.
+  if (status === 200) {
+    try {
+      await Device.findOneAndUpdate(
+        { _user: req.user.id, deviceId: deviceId },
+        {
+          duty: config.duty,
+          state: config.state,
+          timerOn: config.timerOn,
+          timerOff: config.timerOff,
+          timerState: config.timerState
+        }
+      );
+      return res.status(status).send({ status });
+    } catch (err) {
+      console.log("MongoError", err);
+    }
+  }
+  if (status === 404) {
+    return res.status(404).send({ status });
+  }
+  if (status === 429) {
+    // Send error 429: too many request.
+    return res.status(429).send({ status });
+  }
 };
 
 /**
@@ -95,17 +103,20 @@ exports.updateDeviceConfig = async (req, res) => {
  * @param {object} res Respose.
  */
 exports.deleteDevice = async (req, res) => {
-	// Get the deviceid from the body.
-	const deviceId = req.params.id;
-	try {
-		const dev = await Device.findOneAndDelete({_user: req.user.id, deviceId: deviceId});
-		if (dev) {
-			return res.status(200).send({status: 200});
-		}
-		return res.status(204).send({status: 204});
-	} catch (err) {
-		console.log(err);
-	}
+  // Get the deviceid from the body.
+  const deviceId = req.params.id;
+  try {
+    const dev = await Device.findOneAndDelete({
+      _user: req.user.id,
+      deviceId: deviceId
+    });
+    if (dev) {
+      return res.status(200).send({ status: 200 });
+    }
+    return res.status(204).send({ status: 204 });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 /**
@@ -114,9 +125,9 @@ exports.deleteDevice = async (req, res) => {
  * @param {object} res Respose.
  */
 exports.getDeviceState = async (req, res) => {
-	const deviceId = req.params.id;
-	const state = await getGoogleDeviceState(deviceId);
-	res.send({state});
+  const deviceId = req.params.id;
+  const state = await getGoogleDeviceState(deviceId);
+  res.send({ state });
 };
 
 /**
@@ -125,23 +136,24 @@ exports.getDeviceState = async (req, res) => {
  * @param {object} res Respose.
  */
 exports.changeAlias = async (req, res) => {
-	const deviceId = req.params.id;
+  const deviceId = req.params.id;
 
-	try {
-		({config} = req.body.device);
-	} catch (err) {
-		return res.status(400).send({status: 400});
-	}
-	console.log('Change alias ...');
+  try {
+    ({ config } = req.body.device);
+  } catch (err) {
+    return res.status(400).send({ status: 400 });
+  }
+  console.log("Change alias ...");
 
-	try {
-		await Device.findOneAndUpdate({_user: req.user.id, deviceId: deviceId}, {
-				alias: config.alias, 
-		});
-		return res.status(204).send({status: 204});
-	} catch (err) {
-		console.log('MongoError', err);
-	}
-	// res.status(201).send({message: 'Dispositivo registrado'});
-
+  try {
+    await Device.findOneAndUpdate(
+      { _user: req.user.id, deviceId: deviceId },
+      {
+        alias: config.alias
+      }
+    );
+    return res.status(204).send({ status: 204 });
+  } catch (err) {
+    console.log("MongoError", err);
+  }
 };

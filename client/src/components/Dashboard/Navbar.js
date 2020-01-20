@@ -18,6 +18,8 @@ import Button from '@material-ui/core/Button';
 
 import styled from 'styled-components';
 
+import Typography from '@material-ui/core/Typography';
+
 // Material-ui component styles.
 const styles = (theme) =>
   createStyles({
@@ -26,9 +28,10 @@ const styles = (theme) =>
     },
     appbar: {
       backgroundColor: '#1A191E',
+      display: 'grid',
     },
     logo: {
-      width: '150px',
+      width: '51px',
       margin: '-10px',
     },
     avatar: {
@@ -66,6 +69,24 @@ const styles = (theme) =>
       justifyContent: 'center',
       alignItems: 'center',
       padding: theme.spacing(3),
+    },
+    ioledDashboard: {
+      display: 'grid',
+      color: 'white',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: '10vh',
+    },
+    ioledTittle: {
+      fontSize: '16px',
+      marginTop: '10px',
+      fontWeight: 'bold',
+      marginLeft: '13px',
+    },
+    dashboard: {
+      fontSize: '14px',
+      marginTop: '-5px',
+      fontWeight: 'ligthter',
     },
   });
 
@@ -145,6 +166,11 @@ class Navbar extends Component {
             <a href={'/'} style={{flexGrow: 1}}>
               <img className={classes.logo} src={ioledLogo} alt="ioled" />
             </a>
+
+            <Box className={classes.ioledDashboard}>
+              <b className={classes.ioledTittle}> iOLED</b>
+              <p className={classes.dashboard}>DASHBOARD</p>
+            </Box>
 
             <Avatar className={classes.avatar} alt={user.name} src={user.photo} onClick={this.toggleDrawer(true)} />
           </Toolbar>
