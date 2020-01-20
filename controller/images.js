@@ -5,7 +5,6 @@ const {sendUploadToGCS} = require('../lib/images');
 const {predictWithImage} = require('../services/googleAutoML');
 
 const temporalStorage = multer({
-
   storage: multer.MemoryStorage,
   limits: {
     fileSize: 25 * 1024 * 1024, // no larger than 25mb
@@ -13,27 +12,27 @@ const temporalStorage = multer({
 });
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './resources')
+  destination: function(req, file, cb) {
+    cb(null, './resources');
   },
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
-  }
+  },
 });
 
 exports.chargeImage = async (req, res) => {
-    const upload = temporalStorage.single('file');
-    const saveImage = multer({ storage: storage }).single('file')
+  const upload = temporalStorage.single('file');
+  const saveImage = multer({storage: storage}).single('file');
 
-    const file = req;
+  const file = req;
 
-    // await saveImage(req, res, async function () {  
-    //   predict = await predictWithImage(req.file.path);
-    //   console.log(predict);
-    //   fs.unlinkSync(req.file.path); 
-    // });
-    
-    await upload(req, res, async function (err) { 
-      await sendUploadToGCS(req, res);      
-    });
+  // await saveImage(req, res, async function () {
+  //   predict = await predictWithImage(req.file.path);
+  //   console.log(predict);
+  //   fs.unlinkSync(req.file.path);
+  // });
+
+  await upload(req, res, async function(err) {
+    await sendUploadToGCS(req, res);
+  });
 };

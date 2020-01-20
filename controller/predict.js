@@ -10,66 +10,64 @@ const client = new automl.PredictionServiceClient();
 
 const projectId = 'ioled-dev-248517';
 const computeRegion = 'us-central1';
-const modelId = 'ICN690568069034016768'
+const modelId = 'ICN690568069034016768';
 const fileURL = 'https://storage.cloud.google.com/ioled-upload/15725348648923.jpeg';
 const scoreThreshold = '0.7';
-const filePath = '/Users/cristian/Desktop/3.jpeg'
+const filePath = '/Users/cristian/Desktop/3.jpeg';
 
 // Get the full path of the model.
 const modelFullId = client.modelPath(projectId, computeRegion, modelId);
 
 exports.predictWithImage = async (req, res) => {
+  request.get({url: fileURL, encoding: null}, async (err, res, body) => {
+    const data = body.toString('base64');
 
-    request.get({url : fileURL, encoding: null}, async (err, res, body) => {
-        const data = body.toString('base64');
-        
-        // console.log(data);
+    // console.log(data);
 
-        const params = {};
+    const params = {};
 
-        if (scoreThreshold) {
-            params.score_threshold = scoreThreshold;
-        }
+    if (scoreThreshold) {
+      params.score_threshold = scoreThreshold;
+    }
 
-        // Set the payload by giving the content and type of the file.
-        const payload = {};
-        payload.image = {imageBytes: data};
+    // Set the payload by giving the content and type of the file.
+    const payload = {};
+    payload.image = {imageBytes: data};
 
-        // params is additional domain-specific parameters.
-        // currently there is no additional parameters supported.
-        const [response] = await client.predict({
-            name: modelFullId,
-            payload: payload,
-            params: params,
-        });
-        console.log('Prediction results');
-        res.status(200).send({response});
-        console.log(response);
+    // params is additional domain-specific parameters.
+    // currently there is no additional parameters supported.
+    const [response] = await client.predict({
+      name: modelFullId,
+      payload: payload,
+      params: params,
     });
-    
-    // Read the file content for prediction.
-    
-    // console.log(image);
+    console.log('Prediction results');
+    res.status(200).send({response});
+    console.log(response);
+  });
 
-    // const params = {};
+  // Read the file content for prediction.
 
-    // if (scoreThreshold) {
-    //    params.score_threshold = scoreThreshold;
-    // }
+  // console.log(image);
 
-    // // Set the payload by giving the content and type of the file.
-    // const payload = {};
-    // payload.image = {imageBytes: data};
+  // const params = {};
 
-    // // params is additional domain-specific parameters.
-    // // currently there is no additional parameters supported.
-    // const [response] = await client.predict({
-    //     name: modelFullId,
-    //     payload: payload,
-    //     params: params,
-    // });
-    // console.log('Prediction results');
-    // res.status(200).send({response});
-    // console.log(response);
+  // if (scoreThreshold) {
+  //    params.score_threshold = scoreThreshold;
+  // }
 
+  // // Set the payload by giving the content and type of the file.
+  // const payload = {};
+  // payload.image = {imageBytes: data};
+
+  // // params is additional domain-specific parameters.
+  // // currently there is no additional parameters supported.
+  // const [response] = await client.predict({
+  //     name: modelFullId,
+  //     payload: payload,
+  //     params: params,
+  // });
+  // console.log('Prediction results');
+  // res.status(200).send({response});
+  // console.log(response);
 };

@@ -18,8 +18,6 @@ import Button from '@material-ui/core/Button';
 
 import styled from 'styled-components';
 
-import Typography from '@material-ui/core/Typography';
-
 // Material-ui component styles.
 const styles = (theme) =>
   createStyles({
