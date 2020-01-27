@@ -42,7 +42,7 @@ const StyledButton = styled(Button)`
   width: 120px;
 `;
 
-export default function SignIn() {
+export default function Login() {
   const classes = useStyles();
 
   return (
@@ -53,7 +53,7 @@ export default function SignIn() {
         <SvgIcon component={IoledName} viewBox="0 0 111 27" fontSize="inherit" className={classes.name} />
 
         <StyledButton href="/auth/google" type="submit">
-          Sign In
+          Login
         </StyledButton>
       </div>
       <Box mt={8} className={classes.version}>

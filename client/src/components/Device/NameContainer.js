@@ -41,11 +41,6 @@ const styles = (theme) =>
   });
 
 class NameContainer extends Component {
-  // devicesTest() {
-  //   const {devices} = this.props;
-  //   console.log(devices);
-  // }
-
   // Render the component.
   render() {
     const {classes} = this.props;
@@ -63,8 +58,6 @@ class NameContainer extends Component {
             online
           </Box>
         </Box>
-
-        {/* {this.devicesTest()} */}
 
         <Box width="12%" className={classes.arrows} borderRadius={36}>
           <ArrowForwardIosIcon color="secondary" className={classes.arrowIcon} />

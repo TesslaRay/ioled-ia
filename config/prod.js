@@ -6,17 +6,9 @@
  * @param {string} mongoURI - mlab database uri.
  * @param cookieKey - encryption key used for serialize user in passport.js.
  */
-
-const JWT_SECRET = process.env.JWT_SECRET;
-if (JWT_SECRET === undefined) {
-  console.error("JWT_SECRET env value is not valid");
-  process.exit(1);
-}
-
 module.exports = {
   googleClientID: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   mongoURI: process.env.MONGO_URI,
   cookieKey: process.env.COOKIE_KEY,
-  jwtSecret: JWT_SECRET
 };

@@ -9,7 +9,7 @@ import {fetchUser} from '../actions';
 
 // Components.
 import Dashboard from './Dashboard/Dashboard';
-import SignIn from './Dashboard/SignIn';
+import Login from './Dashboard/Login';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -51,7 +51,7 @@ class App extends Component {
       case false:
         return (
           <Fragment>
-            <SignIn />
+            <Login />
           </Fragment>
         );
       default:
