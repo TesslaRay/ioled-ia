@@ -1,6 +1,7 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import userReducer from './userReducer';
 import devicesReducer from './devicesReducer';
+import uiReducer from './uiReducer';
 
 /* Note for reducers:
  * 1. Must return any value besides 'undefined'.
@@ -10,6 +11,7 @@ import devicesReducer from './devicesReducer';
  * 4. Must not mutate its input state argument
  */
 export default combineReducers({
-	user: userReducer,
-	devices: devicesReducer,
+  user: userReducer,
+  devices: devicesReducer,
+  ui: uiReducer,
 });

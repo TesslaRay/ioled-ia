@@ -140,9 +140,9 @@ exports.getDeviceState = async (req, res) => {
   try {
     // Get device state
     const deviceId = req.params.id;
-    const deviceState = await getGoogleDeviceState(deviceId);
-    console.log('[iOLED-API][getDeviceState][Response] ', deviceState);
-    res.status(200).json({deviceState});
+    const state = await getGoogleDeviceState(deviceId);
+    console.log('[iOLED-API][getDeviceState][Response] ', state);
+    res.status(200).send({state});
   } catch (error) {
     console.log('[iOLED-API][getDeviceState (' + deviceId + ')][Error] ', error);
     // Send the error

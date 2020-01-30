@@ -7,7 +7,6 @@ import {withStyles} from '@material-ui/core/styles';
 import Navbar from './Navbar';
 import DeviceList from './DeviceList';
 import SimpleBottomNavigation from './SimpleBottom';
-import PlotContainer from '../Device/PlotContainer';
 
 // Dashboard component styles.
 const styles = (theme) => ({
@@ -26,8 +25,7 @@ class DashBoard extends Component {
       <div className={classes.root}>
         <Navbar />
         <DeviceList />
-        {/* <PlotContainer /> */}
-        <SimpleBottomNavigation />
+        <SimpleBottomNavigation index={0} />
       </div>
     );
   }

@@ -121,7 +121,6 @@ class SliderContainer extends Component {
 
   render() {
     const {classes} = this.props;
-
     const {snackOpen, snackMessage, tempDuty, trans} = this.state;
 
     return (

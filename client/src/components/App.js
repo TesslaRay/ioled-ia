@@ -81,6 +81,4 @@ const mapStateToProps = ({user}) => {
 };
 
 // Connect this component to redux and the action creators.
-// export default connect(mapStateToProps, {fetchUser})(App);
-
 export default connect(mapStateToProps, {fetchUser})(withStyles(styles)(App));

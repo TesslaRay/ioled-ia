@@ -77,7 +77,8 @@ class StateContainer extends Component {
 
   render() {
     const {classes} = this.props;
-    const {temp = 0, hum = 0, state, duty} = this.props;
+    const {temp = 0, hum = 0} = this.props;
+    const {state, duty} = this.props;
 
     return (
       <Box>
